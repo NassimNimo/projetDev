@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["email"];
         $telephone = $_POST["tel"];
 
-            // Check if the username already exists
+        // Check if the username already exists
         $stmt = $conn->prepare("SELECT COUNT(*) FROM client_users WHERE username = ?");
         $stmt->bind_param("s", $username); // Bind username to the first placeholder
         $stmt->execute();
@@ -34,11 +34,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }else {
 
                 // Upload CV file
-                $filename = $_FILES["cv"]["name"];
-                $filedata = file_get_contents($_FILES["cv"]["tmp_name"]);
-                $mimeType = $_FILES["cv"]["type"];
-                $fileSize = $_FILES["cv"]["size"];
-        
+                if(isset($_FILES["cv"])) {
+                    $filename = $_FILES["cv"]["name"];
+                    $filedata = file_get_contents($_FILES["cv"]["tmp_name"]);
+                    $mimeType = $_FILES["cv"]["type"];
+                    $fileSize = $_FILES["cv"]["size"];
+                } else {
+                    // Handle case where "cv" file was not uploaded
+                    throw new Exception("CV file is required.");
+                }
                 // Insert CV file data
                 $sql = "INSERT INTO cv_documents (fileName, data, mimeType, fileSize) VALUES (?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
@@ -49,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
                     // Execute the statement
                     if ($stmt->execute()) {
-                        echo "CV file uploaded and data inserted successfully.";
+
                     } else {
                         echo "Error executing statement: " . $stmt->error;
                     }
@@ -73,11 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Commit the transaction if everything is successful
                 $conn->commit();
                 echo "0";
-            } else {
-                header("Location: index.html");
-                exit;
             }
-
         
     } catch (Exception $e) {
         echo "Database error: " . $e->getMessage();
@@ -86,5 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Close the connection
         $conn->close();
     }
+}else{
+    header("Location: index.html");
 }
 ?>

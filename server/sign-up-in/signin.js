@@ -18,6 +18,11 @@ $(document).ready(function() {
                     document.getElementById("client_alert").style = "display: block !important;"
                     document.getElementById("client_alert").innerHTML = "User not found"
                 }
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth' // Optional: adds smooth scrolling behavior
+                });
             },
             error: function(xhr, status, error) {
                 // Handle errors
