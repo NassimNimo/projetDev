@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil Redcruteur</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <script src="https://kit.fontawesome.com/4fc90babdb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="profRec.css">
+  </head>
+  <body>
+    <header >
+      <!-- navigation bbar -->
+        <nav class="navbar navbar-expand-lg navbar-light ">
+          <div class="container">
+            <a class="navbar-brand" href="#"
+              >Work Wave
+              <img
+                src="..\assets\png\workwave-favicon-black.png"
+                alt="Work Wave Logo"
+                style="height: 30px; margin-right: 10px"
+              />
+            </a>
+  
+            
+  
+           
+  
+            
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                 Notifications
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">notif1</a></li>
+                  <li><a class="dropdown-item" href="#">notif2</a></li>
+                  <li><a class="dropdown-item" href="#">notif3</a></li>
+                </ul>
+              </div>
+            
+          </div> 
+        </nav>
+      </header>
+
+    <div class="row">
+      
+        <div class="col-4">
+          <div class="row ">
+            
+          <!-- photo de profil -->
+            <div class="col-4 ">
+              
+          <img src="R.jpg" class="card-img-top rounded img-fluid" id="previewImage" style="max-width: 100px; max-height: 100px;" alt="profil picture">
+        </div>
+        <div class="col-8">
+          <div class="mb-3">
+            <label for="formFileSm" class="form-label">Modifier la photo de profil</label>
+            <input class="form-control form-control-sm" id="formFileSm" type="file" accept="image/*" >
+          </div>
+        </div>
+        </div>
+        <!-- About user part -->
+            <div class="card mb-3 ">
+                                
+                <div class="card-body">
+                  
+
+                    <div class="card text-bg-light mb-3" style="max-width:100%;">
+                        <div class="card-header">About me</div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <textarea id="editableContent" type="text"  placeholder="Parlez de vous:" disabled style="max-width:100%;"></textarea>
+                          
+                            </div>
+
+                            <div class="col-12">
+
+                              <button id="editButton" type="button" class="btn  btn-outline-secondary btn-sm" onclick="enableEditing()" ><i class="fa-solid fa-pen-to-square"style="max-width:100%;"></i>Modifier </button>
+                              <button id="saveButton" type="button" class="btn btn-outline-secondary btn-sm" onclick="saveChanges()" style="display: none;"><i class="fa-solid fa-save" style="max-width:100%;"></i> Enregistrer</button>
+    </div>
+                          </div>
+                        </div>
+                      </div>
+ 
+<!-- Publier un offre -->
+<!-- ! TODO: ajouter offre a la liste -->
+ <button class="btn btn-dark sticky-top rounded-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+   Publier une offre</button>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+ <div class="offcanvas-header">
+   <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+     Details de l'offre:
+   </h5>
+   <button     type="button"     class="btn-close"     data-bs-dismiss="offcanvas"   aria-label="Close"   ></button>
+ </div>
+ <div class="offcanvas-body">
+   <form class="row g-3 needs-validation" novalidate>
+    <!-- stage ou emploi? -->
+    <div class="col-12">
+      <div class="form-check">
+        <input onclick="enableInputs()" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+        <label class="form-check-label" for="flexRadioDefault1">
+         Stage
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+        <label class="form-check-label" for="flexRadioDefault2">
+          Emploi
+        </label>
+      </div>
+      
+     </div>
+     <!-- Sujet et duree (stage) / voir profRec.js  -->
+     <!--! NB: duree ---> Selection (filtrer donnees) -->
+     <div class="col-12">
+
+      <input id="sujetInput" type="text"  placeholder="Sujet de stage" disabled style="max-width:100%;">
+      <input id="dureeInput" type="text"  placeholder="Durée de stage" disabled style="max-width:100%;">
+
+     </div>
+     <!-- Ville -->
+     <!-- !Base de donnees -->
+     <div class="col-12">
+       <label  class="form-label">Ville</label>
+      <input type="text" placeholder="Ex:Casablanca">
+     </div>
+ <!-- Domaine -->
+     <!-- !Base de donnees -->
+     <div class="col-12">
+       <label  class="form-label">Domaine</label>
+       <select class="form-select" id="validationCustom04" required>
+         <option selected disabled value=""></option>
+         <option>Informatique</option>
+         <option>Marketing</option>
+         <option>Industrie</option>
+         <option>Santé</option>
+         <option>Architecture</option>
+         <option>Autre</option>
+       </select>
+     </div>
+ <!-- Niveau -->
+     
+     <div class="col-12">
+       <label  class="form-label">Niveau</label>
+       <select class="form-select" id="validationCustom04" required>
+         <option selected disabled value=""></option>
+         <option>Bac</option>
+         <option>Bac+2</option>
+         <option>Bac+3</option>
+         <option>Bac+5</option>
+         <option>+</option>
+       </select>
+     </div>
+      <!-- Experience De 1 à 30 ans (voir profRec.js)-->
+     
+     <div class="col-12">
+      <label  for="numberSelect">Années d'experience</label>
+
+     <select id="numberSelect">
+
+      <option value="">Choisir un nombre</option>
+    </select>
+    
+
+    </div>
+    <!-- Details de l'offre -->
+    <div class="col-12">
+      <textarea placeholder="Donner plus de détails" style="width: 100%; min-height: 100px; resize: vertical;"></textarea>
+    </div>
+     <!-- !Publier oofre -->
+     <button type="button" class="btn  btn-outline-secondary btn-sm"><i class="fa-solid fa-pen-to-square" ></i>Publier</button>
+
+   </form>
+ </div>
+</div>
+
+                </div>
+                
+              </div>
+           
+           
+
+          </div>
+          <!-- partie des offres -->
+          <!-- Offre + details + modifier + supprimer -->
+      <div class="col-7 ">
+        
+        <h1>Mes offres:</h1>
+
+
+        <div>
+            
+            <div class="card" style="width: 100%;">
+             <div class="card-body">
+               <h5 class="card-title">Offre 1</h5>
+               <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+               <button type="button" class="btn  btn-outline-danger btn-sm">Supprimer offre</button>
+               <button type="button" class="btn  btn-outline-success btn-sm">Modifier offre</button>
+               
+             </div>
+           </div>
+
+
+           <div class="card" style="width: 100%;">
+             <div class="card-body">
+               <h5 class="card-title">Offre 2</h5>
+               <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+               <button type="button" class="btn  btn-outline-danger btn-sm">Supprimer offre</button>
+               <button type="button" class="btn  btn-outline-success btn-sm">Modifier offre</button>
+             </div>
+           </div>
+
+
+           <div class="card" style="width: 100%;">
+             <div class="card-body">
+               <h5 class="card-title">Offre 3</h5>
+               <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+               <button type="button" class="btn  btn-outline-danger btn-sm">Supprimer offre</button>
+               <button type="button" class="btn  btn-outline-success btn-sm">Modifier offre</button>
+             </div>
+           </div>
+
+
+           <div class="card" style="width: 100%;">
+             <div class="card-body">
+               <h5 class="card-title">Offre 4</h5>
+               <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+               <button type="button" class="btn  btn-outline-danger btn-sm">Supprimer offre</button>
+               <button type="button" class="btn  btn-outline-success btn-sm">Modifier offre</button>
+             </div>
+           </div>
+
+
+           </div>
+
+        
+      
+    </div>
+
+
+
+
+    
+    <script src="profRec.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
