@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include("../DB.php");
 
@@ -15,18 +17,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        
+
         // Comparaison du mot de passe crypté
         if (password_verify($password, $user['password'])) {
+
             echo "0";
+
+            //element de la session
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['id'] = $user['id'];
         } else {
             echo "1";
         }
-        
-    }else{
+    } else {
         echo "2";
     }
-}else{
+} else {
     header("Location: ../../index.html");
     exit; // Ensure that script execution stops after redirection
 }

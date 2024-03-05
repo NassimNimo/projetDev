@@ -1,8 +1,8 @@
 <?php
 
-include("DB.php");
+require "DB.php";
 
-$sql = "SELECT data FROM cv_documents where id=7";
+$sql = "SELECT data FROM cv_documents where id=23";
 $result = mysqli_query($conn, $sql);
 
 if ($result) {
