@@ -18,7 +18,7 @@
   <div class="container">
     <h1 class="col-12 text-center p-4">Sign up</h1>
     <div class="column col-12">
-      <form action="./server/sign-up-in/signup_client.php" method="POST" id="client-form" enctype="multipart/form-data">
+      <form enctype="multipart/form-data" action="./server/sign-up-in/signup_client.php" method="post" id="client-form">
 
         <div id="client-alert" class="alert alert-warning " style="display: none !important;" role="alert">
           <h4 id="client-alert-head" class="alert-heading">Well done!</h4>
