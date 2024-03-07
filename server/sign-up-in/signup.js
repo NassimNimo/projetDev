@@ -72,10 +72,7 @@ $(document).ready(function() {
                     document.getElementById("HR_alert").innerHTML = ""
                 }else if(response === "1"){
                     document.getElementById("HR_alert").style = "display: block !important;"
-                    document.getElementById("HR_alert").innerHTML = "Password incorrect"
-                }else if(response === "2"){
-                    document.getElementById("HR_alert").style = "display: block !important;"
-                    document.getElementById("HR_alert").innerHTML = "User not found"
+                    document.getElementById("HR_alert").innerHTML = "Email already used"
                 }
             },
             error: function(xhr, status, error) {
