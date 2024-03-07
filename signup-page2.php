@@ -18,8 +18,8 @@
   <div class="container">
     <h1 class="col-12 text-center p-4">Sign up</h1>
     <div class="column col-12">
-      <form enctype="multipart/form-data" action="./server/sign-up-in/signup_client.php" method="post" id="client-form">
-
+      <form enctype="multipart/form-data" action="./server/sign-up-in/signup.php" method="post" id="client-form">
+      <input type="hidden" name="form-name" value="client-form">
         <div id="client-alert" class="alert alert-warning " style="display: none !important;" role="alert">
           <h4 id="client-alert-head" class="alert-heading">Well done!</h4>
           <p id="client-alert-par" class="alert-body">Aww yeah, you successfully read this important alert message. This example text is going to run a bit
@@ -110,7 +110,8 @@
       <!-- FORM 2 -->
 
       <!-- ============================================================================================================================== -->
-      <form action="./server/sign-up-in/signup_HR.php" id="HR-form" style="display: none !important;">
+      <form action="./server/sign-up-in/signup.php" id="HR-form" style="display: none !important;">
+        <input type="hidden" name="form-name" value="HR-form">
         <div class="form-group p-1">
           <label for="companyName">Company name</label>
           <input type="text" name="companyName" class="form-control" id="companyName" placeholder="Enter company name"
