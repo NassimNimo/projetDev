@@ -18,9 +18,10 @@
         id="client-form"
         class="form-signin"
         method="post"
-        action="./server/sign-up-in/signin_client.php"
+        action="./server/sign-up-in/signin.php"
         enctype="multipart/form-data"
       >
+        <input type="hidden" name="form-name" value="client-form">
         <img
           class="mb-1"
           src="./assets/png/workwave-favicon-black.png"
@@ -78,10 +79,11 @@
       <form
         id="HR-form"
         method="post"
-        action="./server/sign-up-in/signin_HR.php"
+        action="./server/sign-up-in/signin.php"
         style="display: none"
         enctype="multipart/form-data"
       >
+        <input type="hidden" name="form-name" value="HR-form">
         <img
           class="mb-1"
           src="./assets/png/workwave-favicon-black.png"

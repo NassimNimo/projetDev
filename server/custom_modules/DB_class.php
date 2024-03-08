@@ -190,4 +190,50 @@ class DB_class
         }
 
     }
+
+    public function Authentification($email,$password,$role){
+        try{
+
+            if($role == "HR"){
+
+                //if HR check the HR table for info
+                $sql = "SELECT password, id FROM HR_users WHERE email = :email LIMIT 1";
+            }else{
+
+                //check the client table if anything else
+                $sql = "SELECT password, id FROM client_users WHERE email = :email LIMIT 1";
+            }
+
+            //smae processes for both of them we get the id so we can get 
+            //  into their informations easily cuz the primary key
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+
+            //check if user exists
+            if ($stmt->rowCount() == 1) {
+
+                $user = $stmt->fetch();
+        
+                // Comparaison du mot de passe crypte par RSA
+                if (password_verify($password, $user['password'])) {
+
+                    echo "0";
+                    return $user['id'];
+
+                } else {
+
+                    echo "1";
+                    return null;
+                }
+            } else {
+
+                echo "2";
+                return null;
+            }
+        }catch(PDOException $e){
+            echo "AuthentificationClient error : ". $e->getMessage();
+        }
+    }
 }
