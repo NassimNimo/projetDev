@@ -18,7 +18,7 @@ $(document).ready(function() {
             success: function(response) {
                 // Handle response from the server
                 var clientAlert = document.getElementById("client-alert");
-                console.log(response)
+                console.log(response);
                 if(response === "0"){
                     clientAlert.style="display:block !important;"
                     clientAlert.classList.remove("alert-warning");

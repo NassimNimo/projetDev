@@ -10,18 +10,18 @@ try {
 
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["form_name"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["form-name"])) {
 
     try {
         $DB = new DB_class();
 
         //checks what form we received the request from and treats it accordingly 
 
-        if ($_POST["form_name"] == "client-form") {
+        if ($_POST["form-name"] == "client-form") {
 
             $DB->insertClient($_POST["username"], $_POST["password"], $_POST["firstName"], $_POST["lastName"], $_POST["city"], $_POST["job"], $_POST["email"], $_POST["tel"], $_FILES["cv"]);
         
-        } elseif ($_POST["form_name"] == "HR-form") {
+        } elseif ($_POST["form-name"] == "HR-form") {
 
             $DB->insertHR($_POST["companyName"], $_POST["ICE"], $_POST["industry"], $_POST["HRFirstName"], $_POST["HRLastName"], $_POST["email"], $_POST["password"], $_POST["tel"], $_POST["city"]);
         
@@ -35,7 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["form_name"])) {
     }
 } else {
 
-    header("Location: index.html");
+    header("Location: ../../signin-page.html");
+    exit; // Ensure that script execution stops after redirection
 
 }
 ?>

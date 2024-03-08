@@ -4,7 +4,7 @@ require "./server/DB.php";
 
 if (!isset($_SESSION['id'])) {
   // Redirect to the login page if not logged in
-  header("Location: ../signin-page.html");
+  header("Location: ./signin-page.html");
   exit();
 }
 
