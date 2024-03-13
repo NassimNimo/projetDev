@@ -12,7 +12,7 @@ $(document).ready(function () {
                     document.getElementById("client_alert").style = "display: none !important;"
                     document.getElementById("client_alert").innerHTML = ""
                     setTimeout(function() {
-                        window.location.href = "signin-page.html";
+                        window.location.href = "./profCand.php";
                     },700);
 
                 } else if (response === "1") {

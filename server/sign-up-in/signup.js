@@ -28,7 +28,7 @@ $(document).ready(function() {
                     document.getElementById("client-alert-par").innerHTML = "User created successfully";
 
                     setTimeout(function() {
-                        window.location.href = "signin-page.html";
+                        window.location.href = "signin-page.php";
                     },700);
 
                 }else if(response === "1"){
@@ -67,13 +67,34 @@ $(document).ready(function() {
             success: function(response) {
                 // Handle response from the server
                 console.log(response);
-                if(response === "0"){
-                    document.getElementById("HR_alert").style = "display: none !important;"
-                    document.getElementById("HR_alert").innerHTML = ""
-                }else if(response === "1"){
-                    document.getElementById("HR_alert").style = "display: block !important;"
-                    document.getElementById("HR_alert").innerHTML = "Email already used"
+                if(response == "0"){
+                    document.getElementById("HR-alert").style="display:block !important;"
+                    document.getElementById("HR-alert").classList.remove("alert-warning");
+                    document.getElementById("HR-alert").classList.add("alert-success");
+                    document.getElementById("HR-alert-head").innerHTML = "Success";
+                    document.getElementById("HR-alert-par").innerHTML = "User created successfully";
+                    setTimeout(function() {
+                        window.location.href = "signin-page.php";
+                    },700);
+                }else if(response == "1"){
+                    document.getElementById("HR-alert").style="display:block !important;"
+                    document.getElementById("HR-alert").classList.remove("alert-success");
+                    document.getElementById("HR-alert").classList.add("alert-warning");
+                    document.getElementById("HR-alert-head").innerHTML = "Alert!!";
+                    document.getElementById("HR-alert-par").innerHTML = "Email already used";
+                }else if(response == "2"){
+                    document.getElementById("HR-alert").style="display:block !important;"
+                    document.getElementById("HR-alert").classList.remove("alert-success");
+                    document.getElementById("HR-alert").classList.add("alert-warning");
+                    document.getElementById("HR-alert-head").innerHTML = "Alert!!";
+                    document.getElementById("HR-alert-par").innerHTML = "Societe already exists";
                 }
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth' // Optional: adds smooth scrolling behavior
+                });
+                
             },
             error: function(xhr, status, error) {
                 // Handle errors

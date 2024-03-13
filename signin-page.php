@@ -1,3 +1,12 @@
+<?php
+if(isset($_SESSION['id'])){
+  session_destroy();
+}
+session_start();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -39,6 +48,7 @@
             class="form-control"
             id="client-email"
             placeholder="name@example.com"
+            required
           />
           <label for="client-email">Email address</label>
         </div>
@@ -49,6 +59,7 @@
             class="form-control"
             id="client-password"
             placeholder="Password"
+            required
           />
           <label for="client-password">Password</label>
         </div>
