@@ -13,7 +13,7 @@ $user_id = $_SESSION['id'];
 
 try {
 
-  require_once "./server/custom_modules/DB_class.php";
+  require_once "./server/DB_class.php";
 
   $DB = new DB_class();
 

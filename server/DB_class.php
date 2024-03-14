@@ -5,7 +5,7 @@ class DB_class
     private $dsn = 'mysql:host=localhost;dbname=project_db';
     private $username = 'root';
     private $password = '';
-    private $pdo;
+    protected $pdo;
 
     public function __construct()
     {

@@ -2,7 +2,7 @@
 
 try {
 
-    require_once "../custom_modules/DB_class.php";
+    require_once "../DB_class.php";
 
 } catch (Exception $e) {
 
