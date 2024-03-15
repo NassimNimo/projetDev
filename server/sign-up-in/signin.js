@@ -42,7 +42,6 @@ $(document).ready(function () {
     });
     $('#HR-form').submit(function (e) {
         e.preventDefault(); // Prevent default form submission
-        status2=false;
         $.ajax({
             type: 'POST',
             url: $(this).attr('action'), // URL from form's action attribute
@@ -56,7 +55,6 @@ $(document).ready(function () {
                     setTimeout(function() {
                         window.location.href = "./profRH.php";
                     },700);
-                    status2=false;
                 } else if (response === "1") {
                     document.getElementById("HR_alert").style = "display: block !important;"
                     document.getElementById("HR_alert").innerHTML = "Password incorrect"
@@ -69,9 +67,6 @@ $(document).ready(function () {
                     console.log("erorrrrrrrrrrrrrrr")
                 }
                 console.log("logged in : well")
-                if (status2) {
-                    window.location.href = "http://localhost/projetDev/some.php"; // Redirect if statuss is true
-                }
             },
             error: function (xhr, status, error) {
                 // Handle errors
