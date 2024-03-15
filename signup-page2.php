@@ -77,7 +77,7 @@ try {
                 echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
             }
             } else {
-              echo '<option value="">No job titles found</option>';
+              echo '<option value="-1" selected disabled >No job titles found</option>';
             }
             ?>
           </select>

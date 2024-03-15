@@ -7,6 +7,8 @@ class DB_class
     private $password = '';
     protected $pdo;
 
+    private $pdf_dir = "C:/xampp/CV";
+
     public function __construct()
     {
         try {
@@ -120,25 +122,49 @@ class DB_class
     private function insertCV($File)
     {
         try {
+            if (!file_exists($this->pdf_dir)) {
+                mkdir($this->pdf_dir, 0777, true);
+            }
+            
             $filename = $File["name"];
-            $filedata = file_get_contents($File["tmp_name"]);
-            $mimeType = $File["type"];
-            $fileSize = $File["size"];
+            $tmpFilePath = $File["tmp_name"];
+            $fileSize = filesize($tmpFilePath);
 
-            $sql = "INSERT INTO cv_documents (fileName, data, mimeType, fileSize) 
-                    VALUES (:filename, :filedata, :mimeType, :fileSize)";
+            $destination = $this->pdf_dir . "/" . $filename;
+            if (!move_uploaded_file($tmpFilePath, $destination)) {
+                echo "Failed to move uploaded file.";
+                return;
+            }
+
+            $sql = "INSERT INTO cv_documents (fileName, path, size) 
+                    VALUES (:filename, :path, :fileSize)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
-            $stmt->bindParam(':filedata', $filedata, PDO::PARAM_LOB);
-            $stmt->bindParam(':mimeType', $mimeType, PDO::PARAM_STR);
+            $stmt->bindParam(':path', $destination, PDO::PARAM_STR);
             $stmt->bindParam(':fileSize', $fileSize, PDO::PARAM_INT);
             if (!$stmt->execute()) {
-                echo "Error executing statement: " . $stmt->errorInfo();
+                echo "Error executing statement: ";
+                print_r($stmt->errorInfo());
             }
         } catch (PDOException $e) {
             echo "insertCV error: " . $e->getMessage();
         }
+    }
 
+    public function selectCVPath(int $id_client){
+        try{
+
+            $sql = "SELECT cv.path FROM cv_documents cv, client_users cl WHERE cl.CV = cv.id AND cl.id = :id LIMIT 1;";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(":id",$id_client);
+            $stmt->execute();
+            $res = $stmt->fetch();
+            var_dump($res);
+            return $res[0];
+
+        }catch(PDOException $e){
+            echo "selectCVPath error: " . $e->getMessage();
+        }
     }
 
     public function insertClient($username, $password, $nom, $prenom, $ville, $profession, $email, $telephone, $File, $website, $github, $twitter, $instagram, $facebook)
@@ -273,7 +299,7 @@ class DB_class
 
             $sql = "SELECT * FROM client_users WHERE id = :id LIMIT 1";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam('id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $user = $stmt->fetch();
 
@@ -319,7 +345,7 @@ class DB_class
 
             $sql = "SELECT c.* , p.nom AS profession_name FROM client_users c , profession p  WHERE p.id = profession and c.id=:id LIMIT 1";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam("id", $id);
+            $stmt->bindParam(":id", $id);
             $stmt->execute();
             $userData = $stmt->fetch();
 
@@ -327,6 +353,21 @@ class DB_class
             
         } catch (PDOException $e) {
             echo "fetchIndustries error : " . $e->getMessage();
+        }
+    }
+
+    public function getTech(int $profession_id){
+        try{
+            $sql = "SELECT nom from technologies WHERE profession_id  = :id LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(":id",$profession_id);
+            $stmt->execute();
+            $techArray = $stmt->fetch();
+            $techs = explode(",", $techArray[0]);
+            return $techs;
+        }
+        catch(PDOException $e){
+            echo "getTech error : " . $e->getMessage();
         }
     }
 }
