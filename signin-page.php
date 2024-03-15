@@ -1,3 +1,12 @@
+<?php
+if(isset($_SESSION['id'])){
+  session_destroy();
+}
+session_start();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,9 +27,10 @@
         id="client-form"
         class="form-signin"
         method="post"
-        action="./server/sign-up-in/signin_client.php"
+        action="./server/sign-up-in/signin.php"
         enctype="multipart/form-data"
       >
+        <input type="hidden" name="form-name" value="client-form">
         <img
           class="mb-1"
           src="./assets/png/workwave-favicon-black.png"
@@ -38,6 +48,7 @@
             class="form-control"
             id="client-email"
             placeholder="name@example.com"
+            required
           />
           <label for="client-email">Email address</label>
         </div>
@@ -48,6 +59,7 @@
             class="form-control"
             id="client-password"
             placeholder="Password"
+            required
           />
           <label for="client-password">Password</label>
         </div>
@@ -78,10 +90,11 @@
       <form
         id="HR-form"
         method="post"
-        action="./server/sign-up-in/signin_HR.php"
+        action="./server/sign-up-in/signin.php"
         style="display: none"
         enctype="multipart/form-data"
       >
+        <input type="hidden" name="form-name" value="HR-form">
         <img
           class="mb-1"
           src="./assets/png/workwave-favicon-black.png"

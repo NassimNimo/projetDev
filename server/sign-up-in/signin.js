@@ -2,7 +2,6 @@ statuss = false;
 $(document).ready(function () {
     $('#client-form').submit(function (e) {
         e.preventDefault(); // Prevent default form submission
-        status1 = false; // Initialize statuss variable
         $.ajax({
             type: 'POST',
             url: $(this).attr('action'), // URL from form's action attribute
@@ -12,7 +11,9 @@ $(document).ready(function () {
                 if (response === "0") {
                     document.getElementById("client_alert").style = "display: none !important;"
                     document.getElementById("client_alert").innerHTML = ""
-                    status1 = true;
+                    setTimeout(function() {
+                        window.location.href = "./profCand.php";
+                    },700);
 
                 } else if (response === "1") {
                     document.getElementById("client_alert").style = "display: block !important;"
@@ -30,10 +31,7 @@ $(document).ready(function () {
                     left: 0,
                     behavior: 'smooth' // Optional: adds smooth scrolling behavior
                 });
-                // Check statuss here after response is received
-                if (status1) {
-                    window.location.href = "http://localhost/projetDev/profCand.php"; // Redirect if statuss is true
-                }
+
             },
             error: function (xhr, status, error) {
                 // Handle errors
@@ -44,7 +42,6 @@ $(document).ready(function () {
     });
     $('#HR-form').submit(function (e) {
         e.preventDefault(); // Prevent default form submission
-        status2=false;
         $.ajax({
             type: 'POST',
             url: $(this).attr('action'), // URL from form's action attribute
@@ -55,7 +52,9 @@ $(document).ready(function () {
                 if (response === "0") {
                     document.getElementById("HR_alert").style = "display: none !important;"
                     document.getElementById("HR_alert").innerHTML = ""
-                    status2=false;
+                    setTimeout(function() {
+                        window.location.href = "./profRH.php";
+                    },700);
                 } else if (response === "1") {
                     document.getElementById("HR_alert").style = "display: block !important;"
                     document.getElementById("HR_alert").innerHTML = "Password incorrect"
@@ -67,9 +66,7 @@ $(document).ready(function () {
                     console.log(xhr.status);
                     console.log("erorrrrrrrrrrrrrrr")
                 }
-                if (status2) {
-                    window.location.href = "http://localhost/projetDev/some.php"; // Redirect if statuss is true
-                }
+                console.log("logged in : well")
             },
             error: function (xhr, status, error) {
                 // Handle errors

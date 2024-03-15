@@ -1,24 +1,31 @@
 <?php
+
 session_start();
-require "./server/DB.php";
 
 if (!isset($_SESSION['id'])) {
   // Redirect to the login page if not logged in
-  header("Location: ../signin-page.html");
+  header("Location: ./signin-page.php");
   exit();
 }
 
 // Fetch user data from the database based on the user ID stored in the session
 $user_id = $_SESSION['id'];
-$sql = "SELECT c.* , p.nom AS profession_name FROM client_users c , profession p  WHERE p.id = profession and c.id=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$userData = $result->fetch_assoc();
+
+try {
+
+  require_once "./server/DB_class.php";
+
+  $DB = new DB_class();
+
+} catch (Exception $e) {
+
+  echo "Error requiring DB module : " . $e->getMessage();
+
+}
+
+$userData = $DB->getClientData($user_id);
 
 // Close the statement
-$stmt->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,12 +60,12 @@ $stmt->close();
       data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
       <i class="fa fa-bell"></i>
     </button>
-    <a href="./signin-page.html" class="btn btn-danger my-sm-0 ml-2">
+    <a href="./signin-page.php" class="btn btn-danger my-sm-0 ml-2">
       Log-out
     </a>
   </nav>
 
-  <div class="container mt-3 p-2" style="
+  <div class="container col-12 col-sm-10 col-md-8 mt-3 p-2" style="
         background-color: rgba(220, 255, 255, 0.588);
         border-radius: 5px;
         border: solid rgba(0, 0, 0, 0.144) 1px;
@@ -79,8 +86,7 @@ $stmt->close();
                 <p class="text-muted font-size-sm">
                   <?php echo $userData['ville']; ?>
                 </p>
-                <button class="btn btn-primary">Follow</button>
-                <button class="btn btn-outline-primary">Message</button>
+                <button class="btn btn-primary">Download CV</button>
               </div>
             </div>
           </div>
@@ -88,7 +94,7 @@ $stmt->close();
         <div class="card mt-3">
           <ul class="list-group list-group-flush">
             <?php
-            if (isset($userData['website'])) {
+            if ($userData['website']!=="") {
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -106,7 +112,7 @@ $stmt->close();
             ?>
 
             <?php
-            if (isset($userData['github'])) {
+            if ($userData['github']!=="") {
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -122,7 +128,7 @@ $stmt->close();
             }
             ?>
             <?php
-            if(isset($userData['twitter']))
+            if($userData['twitter']!=="")
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -133,11 +139,11 @@ $stmt->close();
                           </path>
                         </svg>Twitter
                       </h6>
-                      <span class="text-secondary">@bootdey</span>
+                      <span class="text-secondary">'. $userData['twitter'] . '</span>
                     </li>';
             ?>
             <?php
-            if(isset($userData['instagram']))
+            if($userData['instagram']!=="")
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -148,11 +154,11 @@ $stmt->close();
                           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                         </svg>Instagram
                       </h6>
-                      <span class="text-secondary">bootdey</span>
+                      <span class="text-secondary">'. $userData['instagram'] . '</span>
                     </li>';
             ?>
             <?php
-            if(isset($userData['facebook']))
+            if($userData['facebook']!=="")
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -161,7 +167,7 @@ $stmt->close();
                           <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                         </svg>Facebook
                       </h6>
-                      <span class="text-secondary">bootdey</span>
+                      <span class="text-secondary">'. $userData['facebook'] . '</span>
                     </li>';
             ?>
             
@@ -210,7 +216,7 @@ $stmt->close();
             <div class="row">
               <div class="col-sm-12">
                 <a class="btn btn-info" target="__blank"
-                  href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                  href="#">Edit</a>
               </div>
             </div>
           </div>
@@ -219,78 +225,12 @@ $stmt->close();
         <div class="row gutters-sm">
           <div class="col-sm-12 mb-3">
             <div class="card mb-3 text-center">
-              <h4 class="m-2">Job offers:</h4>
-              <div class="card m-2">
-                <div class="card-body" style="background-color: rgba(52, 138, 244, 0.073)">
-                  <h5 class="card-title">Postulation 1</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Card subtitle
-                  </h6>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and
-                    make up the bulk of the card's content.
-                  </p>
-                  <a href="#" class="card-link">Details</a>
-                  <a href="#" class="card-link">Envoyer un mail</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <div class="card-body" style="background-color: rgba(52, 138, 244, 0.073)">
-                  <h5 class="card-title">Postulation 1</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Card subtitle
-                  </h6>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and
-                    make up the bulk of the card's content.
-                  </p>
-                  <a href="#" class="card-link">Details</a>
-                  <a href="#" class="card-link">Envoyer un mail</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <div class="card-body" style="background-color: rgba(52, 138, 244, 0.073)">
-                  <h5 class="card-title">Postulation 1</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Card subtitle
-                  </h6>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and
-                    make up the bulk of the card's content.
-                  </p>
-                  <a href="#" class="card-link">Details</a>
-                  <a href="#" class="card-link">Envoyer un mail</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <div class="card-body" style="background-color: rgba(52, 138, 244, 0.073)">
-                  <h5 class="card-title">Postulation 1</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Card subtitle
-                  </h6>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and
-                    make up the bulk of the card's content.
-                  </p>
-                  <a href="#" class="card-link">Details</a>
-                  <a href="#" class="card-link">Envoyer un mail</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <div class="card-body" style="background-color: rgba(52, 138, 244, 0.073)">
-                  <h5 class="card-title">Postulation 1</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Card subtitle
-                  </h6>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and
-                    make up the bulk of the card's content.
-                  </p>
-                  <a href="#" class="card-link">Details</a>
-                  <a href="#" class="card-link">Envoyer un mail</a>
-                </div>
-              </div>
-            </div>
+              <h3 class="m-2">Job offers :</h3>
+              <?php
+                if(!isset($offreEmloi) || $offreEmloi===[]){
+                  echo "<p>Pas d'offre pour le momment</p>";
+                }
+              ?>
           </div>
         </div>
       </div>
