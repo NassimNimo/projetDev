@@ -53,6 +53,9 @@ $(document).ready(function () {
                 if (response === "0") {
                     document.getElementById("HR_alert").style = "display: none !important;"
                     document.getElementById("HR_alert").innerHTML = ""
+                    setTimeout(function() {
+                        window.location.href = "./profRH.php";
+                    },700);
                     status2=false;
                 } else if (response === "1") {
                     document.getElementById("HR_alert").style = "display: block !important;"

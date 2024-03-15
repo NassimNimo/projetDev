@@ -24,5 +24,3 @@ if ($result === 0) {
         echo $line . "<br>";
     }
 }
-
-?>
