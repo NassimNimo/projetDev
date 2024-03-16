@@ -61,9 +61,9 @@ background-size: cover;">
 
 
 
-    <div class="container-fluid mt-2 row content-center">
+    <div class="container-fluid mt-2 row content-center gutters-sm">
 
-        <div class="col-4 sticky-top">
+        <div class="col-12 col-md-4">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
@@ -121,9 +121,7 @@ background-size: cover;">
 
                     <!-- technologie -->
                     <div class="dropdown">
-                        <button class="btn  dropdown-toggle"
-                            style="color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;"
-                            type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        <button class="btn  dropdown-toggle" style="color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                             Technologie
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width: 100%;">
@@ -142,8 +140,8 @@ background-size: cover;">
 
         </div>
 
-        <div class="col-8">
-            <div class="card">
+        <div class="col-12 col-md-8 mt-2">
+            <div class="card m-1">
                 <div class="row no-gutters">
                     <div class="col-md-4">
                         <!-- link to his profil -->
@@ -164,7 +162,7 @@ background-size: cover;">
 
             </div>
 
-            <div class="card">
+            <div class="card m-1">
                 <div class="row no-gutters">
                     <div class="col-md-4">
                         <!-- link to his profil -->
@@ -184,15 +182,136 @@ background-size: cover;">
 
             </div>
 
+            <div class="card m-1">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <!-- link to his profil -->
+                        <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
+                                alt="Card image cap"></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Nom et Prenom</h5>
+                            <p class="card-text">Eleve ingenieur</p>
+
+                            <a href="path/to/your/file.pdf" download="filename.pdf"
+                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card m-1">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <!-- link to his profil -->
+                        <a href="#" title="voir profile"> <img class="card-img" src="mp.png" alt="Card image cap"></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Nom et Prenom</h5>
+                            <p class="card-text">Eleve ingenieur</p>
+
+                            <a href="path/to/your/file.pdf" download="filename.pdf"
+                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card m-1">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <!-- link to his profil -->
+                        <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
+                                alt="Card image cap"></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Nom et Prenom</h5>
+                            <p class="card-text">Eleve ingenieur</p>
+
+                            <a href="path/to/your/file.pdf" download="filename.pdf"
+                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card m-1">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <!-- link to his profil -->
+                        <a href="#" title="voir profile"> <img class="card-img" src="mp.png" alt="Card image cap"></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Nom et Prenom</h5>
+                            <p class="card-text">Eleve ingenieur</p>
+
+                            <a href="path/to/your/file.pdf" download="filename.pdf"
+                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card m-1">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <!-- link to his profil -->
+                        <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
+                                alt="Card image cap"></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Nom et Prenom</h5>
+                            <p class="card-text">Eleve ingenieur</p>
+
+                            <a href="path/to/your/file.pdf" download="filename.pdf"
+                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card m-1">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <!-- link to his profil -->
+                        <a href="#" title="voir profile"> <img class="card-img" src="mp.png" alt="Card image cap"></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Nom et Prenom</h5>
+                            <p class="card-text">Eleve ingenieur</p>
+
+                            <a href="path/to/your/file.pdf" download="filename.pdf"
+                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
 
-
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script>
+  <script>
         function createBox(option, element) {
             var newBox = document.createElement("div");
             newBox.innerHTML = `
