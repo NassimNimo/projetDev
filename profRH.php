@@ -22,7 +22,7 @@ background-size: cover;">
     background-color: rgba(93, 117, 117, 0.735)">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
-                <a class="navbar-brand" href="#">Work Wave
+                <a class="navbar-brand">Work Wave
                     <img src="assets\png\workwave-favicon-black.png" alt="logo"
                         style="height: 30px; margin-right: 10px" />
                 </a>
@@ -61,7 +61,7 @@ background-size: cover;">
 
 
 
-    <div class="container-fluid mt-2 row content-center gutters-sm">
+    <div class="container-fluid mt-2 row content-center">
 
         <div class="col-12 col-md-4">
             <div class="card">
@@ -83,52 +83,84 @@ background-size: cover;">
                     </div>
                 </div>
             </div>
-            <form method="POST" id="formData">
+            <form method="GET" id="formData">
 
                 <div class="sticky-top border border-dark p-3 " style="background-color: #2c4f43ba;
                 border-bottom-left-radius: 20px; 
                 border-bottom-right-radius: 20px; 
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); ">
-                    <button type="submit" class="btn " style="color: antiquewhite; 
-                    background-color: rgba(93, 117, 117, 0.735); 
-                    border-color: black; 
-                    margin: 4px;">Chercher</button>
+
+
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Make a job offer</button>
+
+                    <div class="offcanvas offcanvas-end" style="width: 50vw;" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel">Make a job offer :</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div class="container col-11 col-sm-10 col-md-8">
+                                <form>
+                                    <input type="hidden" name="idRecruteur" value="5">
+
+                                    <!-- Text input -->
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        <input type="text" name="sujet" id="sujet" class="form-control" />
+                                        <label class="form-label" for="sujet">Sujet</label>
+                                    </div>
+
+                                    <!-- Text input -->
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        <input type="text" name="ville" id="ville" class="form-control" />
+                                        <label class="form-label" for="ville">Ville</label>
+                                    </div>
+
+                                    <!-- Message input -->
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        <textarea class="form-control" id="form6Example7" rows="4"></textarea>
+                                        <label class="form-label" name="description" for="description">Job
+                                            details</label>
+                                    </div>
+                                    <button data-mdb-ripple-init type="submit"
+                                        class="btn btn-primary btn-block mb-4">Publish</button>
+                                    <button data-mdb-ripple-init type="submit"
+                                        class="btn btn-outline-dark btn-block mb-4">Clear
+                                        form</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary" name="chercher">Chercher</button>
 
 
                     <!-- domaine -->
-                    <select class="form-select "
+                    <select class="form-select" name="profession" id="domainSelect"
                         style="text-align: center; color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;">
                         <option selected>Domaine</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option>Journaliste</option>
+                        <option>Médecin</option>
+                        <option>Three</option>
                     </select>
+                    <!-- <input type="text" name="profession" id=""> -->
 
 
-                    <!-- <div class="dropdown">
-                        <button class="btn  dropdown-toggle"
-                            style="color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;"
-                            type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                            Domaine
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width: 100%;">
-                            <span class="dropdown-item">Option 1</span>
-                            <span class="dropdown-item">Option 2</span>
-                            <span class="dropdown-item">Option 3</span>
-                        </div>
-                    </div> -->
+
 
 
                     <!-- technologie -->
                     <div class="dropdown">
-                        <button class="btn  dropdown-toggle" style="color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                            Technologie
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width: 100%;">
-                            <span class="dropdown-item" onclick="createBox('Option 1', this)">Option 1</span>
-                            <span class="dropdown-item" onclick="createBox('Option 2', this)">Option 2</span>
-                            <span class="dropdown-item" onclick="createBox('Option 3', this)">Option 3</span>
-                        </div>
+                        <select class="btn dropdown-toggle"
+                            style="color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;"
+                            onchange="createBox(this)">
+                            <option value="Option 1">Option 1</option>
+                            <option value="Option 2">Option 2</option>
+                            <option value="Option 3">Option 3</option>
+                        </select>
                     </div>
 
                     <div id="selectedBoxesContainer" class="container mt-3"></div>
@@ -144,7 +176,6 @@ background-size: cover;">
             <div class="card m-1">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <!-- link to his profil -->
                         <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
                                 alt="Card image cap"></a>
                     </div>
@@ -161,157 +192,86 @@ background-size: cover;">
                 </div>
 
             </div>
+            <?php
 
-            <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <!-- link to his profil -->
-                        <a href="#" title="voir profile"> <img class="card-img" src="mp.png" alt="Card image cap"></a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom et Prenom</h5>
-                            <p class="card-text">Eleve ingenieur</p>
+            require_once './server/DB_class.php';
 
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                        </div>
-                    </div>
+            class cardClient
+            {
+                private $nom;
+                private $prenom;
+                private $profession;
+                public $cv;
+                public $score;
+                public $id;
 
-                </div>
+                public function __construct($id, $nom, $prenom, $profession)
+                {
+                    $this->id = $id;
+                    $this->nom = $nom;
+                    $this->prenom = $prenom;
+                    $this->profession = $profession;
+                    $this->score = 0;
+                    $db = new DB_class();
 
-            </div>
+                    $this->cv = $db->selectCVPath($id);
+                }
 
-            <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <!-- link to his profil -->
-                        <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
-                                alt="Card image cap"></a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom et Prenom</h5>
-                            <p class="card-text">Eleve ingenieur</p>
+                public function afficherDansCarte()
+                {
+                    echo '<div class="card m-1">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <!-- Lien vers le profil ou autre -->
+                                    <a href="#" title="voir profil">
+                                        <img class="card-img" src="./assets/" alt="Card image cap">
+                                    </a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">' . $this->nom . ' ' . $this->prenom . '</h5>
+                                        <p class="card-text">' . $this->profession . '</p>
+                                        <a  href="' . $this->cv . '" class="btn btn-primary btn-sm" target="_blank">Voir CV</a>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                }
+            }
 
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                        </div>
-                    </div>
+            $db = new DB_class();
 
-                </div>
+            if (isset ($_GET['chercher'])) {
+                $selectedProfession = $_GET['profession'];
+                // echo $selectedProfession;
+            
+                $users = $DB->getUsersByProfession($selectedProfession);
+                if ($users) {
 
-            </div>
 
-            <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <!-- link to his profil -->
-                        <a href="#" title="voir profile"> <img class="card-img" src="mp.png" alt="Card image cap"></a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom et Prenom</h5>
-                            <p class="card-text">Eleve ingenieur</p>
 
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                        </div>
-                    </div>
+                    foreach ($users as $user) {
+                        $clientIds[] = $user['id'];
+                        $client = new cardClient($user['id'], $user['nom'], $user['prenom'], $selectedProfession);
+                        $clientTable[] = $client;
+                        $client->afficherDansCarte();
+                    }
+                }
+            }
 
-                </div>
+            ?>
 
-            </div>
-
-            <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <!-- link to his profil -->
-                        <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
-                                alt="Card image cap"></a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom et Prenom</h5>
-                            <p class="card-text">Eleve ingenieur</p>
-
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <!-- link to his profil -->
-                        <a href="#" title="voir profile"> <img class="card-img" src="mp.png" alt="Card image cap"></a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom et Prenom</h5>
-                            <p class="card-text">Eleve ingenieur</p>
-
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <!-- link to his profil -->
-                        <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
-                                alt="Card image cap"></a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom et Prenom</h5>
-                            <p class="card-text">Eleve ingenieur</p>
-
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <!-- link to his profil -->
-                        <a href="#" title="voir profile"> <img class="card-img" src="mp.png" alt="Card image cap"></a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom et Prenom</h5>
-                            <p class="card-text">Eleve ingenieur</p>
-
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
 
         </div>
 
     </div>
 
 
+
     <script src="js/bootstrap.bundle.min.js"></script>
-  <script>
+    <script>
         function createBox(option, element) {
             var newBox = document.createElement("div");
             newBox.innerHTML = `

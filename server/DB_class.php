@@ -350,7 +350,7 @@ class DB_class
             $userData = $stmt->fetch();
 
             return $userData;
-            
+
         } catch (PDOException $e) {
             echo "fetchIndustries error : " . $e->getMessage();
         }
@@ -368,6 +368,24 @@ class DB_class
         }
         catch(PDOException $e){
             echo "getTech error : " . $e->getMessage();
+        }
+    }
+    
+    public function getUsersByProfession($profession)
+    {
+        try {
+            $sql = "select * from client_users where profession =(SELECT id FROM profession where nom =:profession)";
+            $stmt = $this->pdo->prepare($sql);
+            
+            $stmt->bindParam(':profession', $profession);
+            $stmt->execute();
+            $users = $stmt->fetchAll();
+           
+    
+            return $users;
+        } catch (PDOException $e) {
+            echo "getUsersByProfession error: " . $e->getMessage();
+            return null;
         }
     }
 }
