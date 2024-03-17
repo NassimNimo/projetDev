@@ -365,7 +365,7 @@ class DB_class
     {
         try {
 
-            $sql = "SELECT c.* , p.nom AS profession_name FROM client_users c , profession p  WHERE p.id = profession and c.id=:id LIMIT 1";
+            $sql = "SELECT c.* , p.nom AS profession_name, cv.path as cv_path  FROM cv_documents cv, client_users c , profession p  WHERE cv.id = c.CV AND p.id = profession and c.id=:id LIMIT 1";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -436,6 +436,56 @@ class DB_class
         } catch (PDOException $e) {
             echo "insertJobOffer error: " . $e->getMessage();
             return null;
+        }
+    }
+    public function getJobOffersByIndustry($industry)
+    {
+        try{
+
+            $sql = "SELECT o.*, hr.nomSociete as nomSociete FROM offreemploi o, hr_users hr where hr.id = o.idRecruteur AND o.idProfession = ?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(1,$industry,pdo::PARAM_INT);
+            $stmt->execute();
+            $offers = $stmt->fetchAll();
+
+            return $offers;
+
+        }catch(PDOException $e){
+            echo "getJobOffersByIndustry error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function postulation($idCondidat, $idOffreEmploi)
+    {
+        try{
+
+            $sql = "INSERT INTO postulation (idCondidat, idOffreEmploi) values (?,?); ";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(1,$idCondidat,pdo::PARAM_INT);
+            $stmt->bindParam(2,$idOffreEmploi,pdo::PARAM_INT);
+            $stmt->execute();
+
+        }catch(PDOException $e){
+            echo "postulation function error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function getCandidates($id_rec)
+    {
+        try {
+
+            $sql = "SELECT c.nom, c.prenom, pr.nom as prof, o.sujet as jobTitle, cv.path  FROM client_users c, hr_users hr, postulation p, cv_documents cv, profession pr, offreemploi o
+            WHERE hr.id = o.idRecruteur AND p.idOffreEmploi = o.id AND p.idCondidat = c.id AND c.CV = cv.id AND pr.id = c.profession";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $Candidates = $stmt->fetchAll();
+
+            return $Candidates;
+
+        } catch (PDOException $e) {
+            echo "fetchIndustries error : " . $e->getMessage();
         }
     }
 }

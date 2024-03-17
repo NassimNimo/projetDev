@@ -6,13 +6,22 @@ $DB = new DB_class();
 
 session_start();
 
-if(!isset($_SESSION['id'])){
+if (!isset ($_SESSION['id'])) {
     header("Location: ./signin-page.php");
     exit();
 }
 
 $professions = $DB->fetchProfessions();
 $userData = $DB->getHRByID($_SESSION['id']);
+$condidats = $DB->getCandidates($userData['id']);
+
+
+
+/////////////////////////////////////////////////////
+//fach tbghi dir chi score ha kifach tzido //////////
+/////////////////////////////////////////////////////
+// $condidats[0]['score'] = 89;
+
 // echo "<pre>";
 // var_dump($userData);
 // echo "</pre>"
@@ -75,7 +84,7 @@ background-size: cover;">
                                 <?php echo $userData['HRManagerNom'] . ' ' . $userData['HRManagerPrenom']; ?>
                             </h4>
                             <p class="text-secondary mb-1">
-                                <?php echo "societe : " . $userData['nomSociete'] ; ?>
+                                <?php echo "societe : " . $userData['nomSociete']; ?>
                             </p>
                             <p class="text-muted font-size-sm">
                                 <?php echo $userData['industyName']; ?>
@@ -109,7 +118,8 @@ background-size: cover;">
 
                                 <!-- profession -->
                                 <div data-mdb-input-init class="form-outline mb-2">
-                                    <select required class="form-select" aria-label="Large select example" name="prof" id="profession">
+                                    <select required class="form-select" aria-label="Large select example" name="prof"
+                                        id="profession">
                                         <option selected disabled></option>
                                         <?php
                                         // Check if records were found
@@ -125,7 +135,7 @@ background-size: cover;">
                                     </select>
                                     <label class="form-label" for="prof">Proffession a chercher</label>
                                 </div>
-                                
+
 
                                 <!-- Text input -->
                                 <div data-mdb-input-init class="form-outline mb-2">
@@ -157,7 +167,7 @@ background-size: cover;">
                                     <input type="text" name="exp" id="exp" class="form-control" />
                                     <label class="form-label" for="exp">Experiences</label>
                                 </div>
-                                
+
                                 <button data-mdb-ripple-init type="submit" id="clear"
                                     class="btn btn-dark btn-block mb-4">Publish</button>
 
@@ -180,16 +190,16 @@ background-size: cover;">
                         <option selected disabled>Domaine</option>
                         <?php
 
-                                        // Check if records were found
-                                        if (count($professions) > 0) {
-                                            // Output data of each row as options for the select list
-                                            foreach ($professions as $row) {
-                                                echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="-1" selected disabled >No job titles found</option>';
-                                        }
-                                        ?>
+                        // Check if records were found
+                        if (count($professions) > 0) {
+                            // Output data of each row as options for the select list
+                            foreach ($professions as $row) {
+                                echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
+                            }
+                        } else {
+                            echo '<option value="-1" selected disabled >No job titles found</option>';
+                        }
+                        ?>
                     </select>
                     <!-- <input type="text" name="profession" id=""> -->
 
@@ -200,17 +210,17 @@ background-size: cover;">
                             onchange="createBox(this.value,this)">
                             <option selected disabled>technologies</option>
                             <?php
-                                        $professions = $DB->fetchProfessions();
-                                        // Check if records were found
-                                        if (count($professions) > 0) {
-                                            // Output data of each row as options for the select list
-                                            foreach ($professions as $row) {
-                                                echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="-1" selected disabled >No job titles found</option>';
-                                        }
-                                        ?>
+                            $professions = $DB->fetchProfessions();
+                            // Check if records were found
+                            if (count($professions) > 0) {
+                                // Output data of each row as options for the select list
+                                foreach ($professions as $row) {
+                                    echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
+                                }
+                            } else {
+                                echo '<option value="-1" selected disabled >No job titles found</option>';
+                            }
+                            ?>
                         </select>
                     </div>
 
@@ -224,107 +234,86 @@ background-size: cover;">
         </div>
 
         <div class="col-12 col-md-8 mt-2">
+            <?php
+
+            if (count($condidats) > 0) {
+                // Output data of each row as options for the select list
+                foreach ($condidats as $row) {
+
+                    $localFilePath = $row["path"];
+                    $localFilePath = str_replace('\\', '/', $localFilePath);
+                    $documentName = basename($localFilePath);
+                    $baseURL = 'http://localhost/';
+                    $documentURL = $baseURL . 'CV/' . $documentName;
+
+                    echo '  <div class="card m-1">
+                                <div class="row no-gutters m-2">
+                                    <div class="col-md-3">
+                                    <a href="#" title="voir profile"> <img class="card-img" src="./assets/otherassets/default-pfp.jpg" style="width: 200px !important;"
+                                        alt="Card image cap"></a>
+                                    </div>
+                                    <div class="col-md-9">
+                                    <h3 class="text-center">' . $row['jobTitle'] . '</h3>
+                                        <div class="card-body">
+                                            <h5 class="card-title">' . $row['nom'] . ' ' . $row['prenom'] . '</h5>
+                                            <p class="card-text">' . $row['prof'] . '</p>
+                
+                                            
+                                            <div class="d-flex justify-content-between">
+                                                <a href="' . $documentURL . '" download="' . $row['nom'] . '_' . $row['prenom'] . '_CV.pdf"
+                                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                                                <p>' . (isset ($row['score']) ? 'score : ' . $row['score'] : '') . '</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                </div>
+                                </div>';
+                }
+            } else {
+                echo '<option value="-1" selected disabled >No job titles found</option>';
+            }
+            ?>
             <div class="card m-1">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <a href="#" title="voir profile"> <img class="card-img" src="./assets/"
+
+                <div class="row no-gutters m-2">
+                    <div class="col-md-3">
+                        <a href="#" title="voir profile"> <img class="card-img"
+                                src="./assets/otherassets/default-pfp.jpg" style="width: 200px !important;"
                                 alt="Card image cap"></a>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
+                        <h3 class="text-center">Tilte</h3>
                         <div class="card-body">
                             <h5 class="card-title">Nom et Prenom</h5>
                             <p class="card-text">Eleve ingenieur</p>
 
-                            <a href="path/to/your/file.pdf" download="filename.pdf"
-                                class="btn btn-primary btn-sm ">Telecharger cv</a>
+                            <div class="d-flex justify-content-between">
+                                <a href="path/to/your/file.pdf" download="filename.pdf"
+                                    class="btn btn-primary btn-sm ">Telecharger cv</a>
+                                <p>
+                                    <?php echo isset ($score) ? "score : 50" : ""; ?>
+                                </p>
+                            </div>
+
                         </div>
                     </div>
 
                 </div>
-
             </div>
-            <?php
-
-            require_once './server/DB_class.php';
-
-            class cardClient
-            {
-                private $nom;
-                private $prenom;
-                private $profession;
-                public $cv;
-                public $score;
-                public $id;
-
-                public function __construct($id, $nom, $prenom, $profession)
-                {
-                    $this->id = $id;
-                    $this->nom = $nom;
-                    $this->prenom = $prenom;
-                    $this->profession = $profession;
-                    $this->score = 0;
-                    $db = new DB_class();
-
-                    $this->cv = $db->selectCVPath($id);
-                }
-
-                public function afficherDansCarte()
-                {
-                    echo '<div class="card m-1">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <!-- Lien vers le profil ou autre -->
-                                    <a href="#" title="voir profil">
-                                        <img class="card-img" src="./assets/" alt="Card image cap">
-                                    </a>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">' . $this->nom . ' ' . $this->prenom . '</h5>
-                                        <p class="card-text">' . $this->profession . '</p>
-                                        <a  href="' . $this->cv . '" class="btn btn-primary btn-sm" target="_blank">Voir CV</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>';
-                }
-            }
-
-            $db = new DB_class();
-
-            if (isset ($_GET['chercher'])) {
-                $selectedProfession = $_GET['profession'];
-                // echo $selectedProfession;
-            
-                $users = $DB->getUsersByProfession($selectedProfession);
-                if ($users) {
-
-
-
-                    foreach ($users as $user) {
-                        $clientIds[] = $user['id'];
-                        $client = new cardClient($user['id'], $user['nom'], $user['prenom'], $selectedProfession);
-                        $clientTable[] = $client;
-                        $client->afficherDansCarte();
-                    }
-                }
-            }
-
-            ?>
-
 
         </div>
 
     </div>
 
     <script>
-        class domain{
+        class domain {
 
-            listTech=[];
+            listTech = [];
 
-            constructor(nom, ...list){
+            constructor(nom, ...list) {
                 this.nom = nom;
-                this.listTech=list;
+                this.listTech = list;
             }
 
         }

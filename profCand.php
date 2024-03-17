@@ -2,7 +2,7 @@
 
 session_start();
 
-if (!isset($_SESSION['id'])) {
+if (!isset ($_SESSION['id'])) {
   // Redirect to the login page if not logged in
   header("Location: ./signin-page.php");
   exit();
@@ -24,6 +24,8 @@ try {
 }
 
 $userData = $DB->getClientData($user_id);
+$offreEmloi = $DB->getJobOffersByIndustry($userData['profession']);
+
 
 // Close the statement
 ?>
@@ -86,7 +88,25 @@ $userData = $DB->getClientData($user_id);
                 <p class="text-muted font-size-sm">
                   <?php echo $userData['ville']; ?>
                 </p>
-                <button class="btn btn-primary">Download CV</button>
+                <a download href=<?php
+
+                // Local file path
+                $localFilePath = $userData['cv_path'];
+
+                // Replace backslashes with forward slashes (for Windows compatibility)
+                $localFilePath = str_replace('\\', '/', $localFilePath);
+
+                // Get the document name from the file path
+                $documentName = basename($localFilePath);
+
+                // Define the base URL of your web server
+                $baseURL = 'http://localhost/';
+
+                // Construct the URL to the document
+                $documentURL = $baseURL . 'CV/' . $documentName;
+
+                echo $documentURL;
+                ?> class="btn btn-primary">Download CV</a>
               </div>
             </div>
           </div>
@@ -94,7 +114,7 @@ $userData = $DB->getClientData($user_id);
         <div class="card mt-3">
           <ul class="list-group list-group-flush">
             <?php
-            if ($userData['website']!=="") {
+            if ($userData['website'] !== "") {
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -112,7 +132,7 @@ $userData = $DB->getClientData($user_id);
             ?>
 
             <?php
-            if ($userData['github']!=="") {
+            if ($userData['github'] !== "") {
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -123,12 +143,12 @@ $userData = $DB->getClientData($user_id);
                           </path>
                         </svg>Github
                       </h6>
-                      <span class="text-secondary">'. $userData['github'] . '</span>
+                      <span class="text-secondary">' . $userData['github'] . '</span>
                     </li>';
             }
             ?>
             <?php
-            if($userData['twitter']!=="")
+            if ($userData['twitter'] !== "")
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -139,11 +159,11 @@ $userData = $DB->getClientData($user_id);
                           </path>
                         </svg>Twitter
                       </h6>
-                      <span class="text-secondary">'. $userData['twitter'] . '</span>
+                      <span class="text-secondary">' . $userData['twitter'] . '</span>
                     </li>';
             ?>
             <?php
-            if($userData['instagram']!=="")
+            if ($userData['instagram'] !== "")
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -154,11 +174,11 @@ $userData = $DB->getClientData($user_id);
                           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                         </svg>Instagram
                       </h6>
-                      <span class="text-secondary">'. $userData['instagram'] . '</span>
+                      <span class="text-secondary">' . $userData['instagram'] . '</span>
                     </li>';
             ?>
             <?php
-            if($userData['facebook']!=="")
+            if ($userData['facebook'] !== "")
               echo '<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                       <h6 class="mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -167,10 +187,10 @@ $userData = $DB->getClientData($user_id);
                           <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                         </svg>Facebook
                       </h6>
-                      <span class="text-secondary">'. $userData['facebook'] . '</span>
+                      <span class="text-secondary">' . $userData['facebook'] . '</span>
                     </li>';
             ?>
-            
+
           </ul>
         </div>
       </div>
@@ -215,8 +235,7 @@ $userData = $DB->getClientData($user_id);
             <hr />
             <div class="row">
               <div class="col-sm-12">
-                <a class="btn btn-info" target="__blank"
-                  href="#">Edit</a>
+                <a class="btn btn-info" target="__blank" href="#">Edit</a>
               </div>
             </div>
           </div>
@@ -227,26 +246,73 @@ $userData = $DB->getClientData($user_id);
             <div class="card mb-3 text-center">
               <h3 class="m-2">Job offers :</h3>
               <?php
-                if(!isset($offreEmloi) || $offreEmloi===[]){
-                  echo "<p>Pas d'offre pour le momment</p>";
+              if (!isset ($offreEmloi) || $offreEmloi === []) {
+                echo "<p>Pas d'offre pour le momment</p>";
+              } else {
+                foreach ($offreEmloi as $row) {
+                  echo '<div class="card text-center m-2">
+                    <div class="card-header">
+                      ' . $row['nomSociete'] . '
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title">' . $row['sujet'] . '</h5>
+                      <p class="card-text">' . $row['description'] . '</p>
+                      <button id="executePHP" value="' . $row['id'] . '" class="btn btn-outline-dark">Submit application</button>
+                    </div>
+                    <div class="card-footer text-body-secondary">
+                      Duree : ' . $row['duree'] . '
+                    </div>
+                  </div>';
                 }
+              }
               ?>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-  <script src="./js/bootstrap.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#executePHP').click(function () {
+
+      var idOffre = Number($(this).val()); // Get the value of the button
+      var idClient = "<?php echo $userData['id']; ?>";
+
+      $.ajax({
+        url: './server/postulate.php', // Replace 'your_script.php' with the path to your PHP script
+        type: 'POST', // Use POST method to send data
+        data: {
+          Offre: idOffre,
+          Client: idClient
+        }, // Pass the button value as a parameter
+        success: function (response) {
+          document.getElementById("executePHP").classList.remove("btn-outline-dark");
+          if(response ==="0"){
+            document.getElementById("executePHP").classList.add("btn-success", "disabled");
+            document.getElementById("executePHP").innerHTML="Sent successfully";
+          }else{
+            document.getElementById("executePHP").classList.add("btn-secondary", "disabled");
+            document.getElementById("executePHP").innerHTML="Already postulated";
+          }
+
+          // Handle successful response from the PHP script
+          console.log(response);
+        },
+        error: function (xhr, status, error) {
+          // Handle errors
+          console.error(error);
+        }
+      });
+    });
+  });
+</script>
+
+<!-- Keep this script tag -->
+<script src="./js/bootstrap.js"></script>
+
 </body>
 
 </html>
