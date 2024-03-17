@@ -9,18 +9,6 @@ class CV_class:
         self.projet = []
         self.experience = []
 
-        # Define scoring weights for each attribute
-        self.scoring_weights = {
-            "formation": 1,
-            "compétence": 1,
-            "profil": 1,
-            "contacts": 1,
-            "langue": 1,
-            "loisir": 1,
-            "projet": 1,
-            "experience":1
-        }
-
 
     key_words = {
         "formation": ["éducation", "formation", "qualifications", "certifications", "diplômes", "ateliers",
@@ -54,6 +42,7 @@ class CV_class:
                         "employment history", "career history"],
         "loisir": ["loisirs", "intérêts", "passions", "hobbies", "interests"]
     }
+
 # Method to calculate the total score based on extracted data
     def calculate_total_score(self):
         total_score = 0
@@ -61,7 +50,7 @@ class CV_class:
             # Get the score for the attribute and multiply it by the number of elements in the attribute
             total_score += self.scoring_weights[attribute] * len(getattr(self, attribute))
         return total_score
-    
+
     def extract_values(self, TXT):
         lines = [line.strip() for line in TXT.split('\n') if line.strip()]
         print(TXT)

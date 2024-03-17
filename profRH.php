@@ -15,12 +15,10 @@ $professions = $DB->fetchProfessions();
 $userData = $DB->getHRByID($_SESSION['id']);
 $condidats = $DB->getCandidates($userData['id']);
 
-
-
 /////////////////////////////////////////////////////
 //fach tbghi dir chi score ha kifach tzido //////////
 /////////////////////////////////////////////////////
-// $condidats[0]['score'] = 89;
+$condidats[0]['score'] = 89;
 
 // echo "<pre>";
 // var_dump($userData);
@@ -102,6 +100,9 @@ background-size: cover;">
 
                 <div class="offcanvas offcanvas-end" style="width: 80vw;" tabindex="-1" id="offcanvasRight"
                     aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
                     <div class="offcanvas-body">
                         <div class="container col-11 col-sm-10 col-md-8 ">
                             <form id="jobOffer" method="post" action="./server/jobOffer/jobOffer.php">
@@ -245,6 +246,7 @@ background-size: cover;">
                     $documentName = basename($localFilePath);
                     $baseURL = 'http://localhost/';
                     $documentURL = $baseURL . 'CV/' . $documentName;
+                    echo $documentURL;
 
                     echo '  <div class="card m-1">
                                 <div class="row no-gutters m-2">
@@ -257,12 +259,12 @@ background-size: cover;">
                                         <div class="card-body">
                                             <h5 class="card-title">' . $row['nom'] . ' ' . $row['prenom'] . '</h5>
                                             <p class="card-text">' . $row['prof'] . '</p>
-                
-                                            
+
+
                                             <div class="d-flex justify-content-between">
-                                                <a href="' . $documentURL . '" download="' . $row['nom'] . '_' . $row['prenom'] . '_CV.pdf"
+                                                <a href="'. $documentURL .'" download="' . $row['nom'] . '_' . $row['prenom'] . '_CV.pdf"
                                                 class="btn btn-primary btn-sm ">Telecharger cv</a>
-                                                <p>' . (isset ($row['score']) ? 'score : ' . $row['score'] : '') . '</p>
+                                                <p >' . (isset ($row['score']) ? 'score : <span id="score">' . $row['score'] : '</span>') . '</p>
                                             </div>
                                         </div>
                                     </div>

@@ -7,7 +7,7 @@ class DB_class
     private $password = '';
     protected $pdo;
 
-    private $pdf_dir = "C:/xampp/CV";
+    private $pdf_dir = "C:/xampp/htdocs/CV";
 
     public function __construct()
     {
