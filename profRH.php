@@ -1,3 +1,23 @@
+<?php
+
+require_once "./server/DB_class.php";
+
+$DB = new DB_class();
+
+session_start();
+
+if(!isset($_SESSION['id'])){
+    header("Location: ./signin-page.php");
+    exit();
+}
+
+$professions = $DB->fetchProfessions();
+$userData = $DB->getHRByID($_SESSION['id']);
+// echo "<pre>";
+// var_dump($userData);
+// echo "</pre>"
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +26,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap.css" />
-    <!-- <link rel="stylesheet" href="homeCand.css" /> -->
 
     <title>Espace candidat</title>
 </head>
@@ -17,42 +36,24 @@ background-image: linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0
 background-blend-mode: lighten;
 background-repeat: no-repeat;
 background-size: cover;">
+
+
     <header style="position: relative;
     padding: 0 2rem;
-    background-color: rgba(93, 117, 117, 0.735)">
-        <nav class="navbar navbar-expand-lg navbar-light">
+    background-color: #212529">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand">Work Wave
-                    <img src="assets\png\workwave-favicon-black.png" alt="logo"
+                    <img src="assets\png\workwave-favicon-white.png" alt="logo"
                         style="height: 30px; margin-right: 10px" />
                 </a>
 
                 <div class="side bar"></div>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-
-                            <!-- lien profil -->
-                            <a href="#" class="btn btn-dark " style="height: 40px; margin-right: 10px">
-                                Profile
-                            </a>
-
-
-                        </li>
-                        <li class="nav-item">
-                            <!-- lien vers acceuil -->
-                            <a href="#" class="btn btn-dark " style="height: 40px; margin-right: 10px">
-                                Acceuil
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <a href="./signin-page.php" class="btn btn-danger my-sm-0 ml-2">
+                    Log-out
+                </a>
             </div>
         </nav>
     </header>
@@ -71,101 +72,151 @@ background-size: cover;">
                             width="150" />
                         <div class="mt-3">
                             <h4>
-                                <?php echo "nnn" . ' ' . "nnnn"; ?>
+                                <?php echo $userData['HRManagerNom'] . ' ' . $userData['HRManagerPrenom']; ?>
                             </h4>
                             <p class="text-secondary mb-1">
-                                <?php echo "nnnnnn"; ?>
+                                <?php echo "societe : " . $userData['nomSociete'] ; ?>
                             </p>
                             <p class="text-muted font-size-sm">
-                                <?php echo "nnnnnnnnnnn"; ?>
+                                <?php echo $userData['industyName']; ?>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <form method="GET" id="formData">
 
-                <div class="sticky-top border border-dark p-3 " style="background-color: #2c4f43ba;
-                border-bottom-left-radius: 20px; 
-                border-bottom-right-radius: 20px; 
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); ">
+            <div class="container-fluid bg-dark sticky-top border border-dark rounded mt-1 pt-2">
 
 
-                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Make a job offer</button>
+                <button class="btn btn-outline-light mb-1" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Make a job offer</button>
 
-                    <div class="offcanvas offcanvas-end" style="width: 50vw;" tabindex="-1" id="offcanvasRight"
-                        aria-labelledby="offcanvasRightLabel">
-                        <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasRightLabel">Make a job offer :</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <div class="container col-11 col-sm-10 col-md-8">
-                                <form>
-                                    <input type="hidden" name="idRecruteur" value="5">
+                <div class="offcanvas offcanvas-end" style="width: 80vw;" tabindex="-1" id="offcanvasRight"
+                    aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-body">
+                        <div class="container col-11 col-sm-10 col-md-8 ">
+                            <form id="jobOffer" method="post" action="./server/jobOffer/jobOffer.php">
+                                <h2 class="offcanvas-title m-3 text-center" id="offcanvasRightLabel">Make a job
+                                    offer :</h2>
 
-                                    <!-- Text input -->
-                                    <div data-mdb-input-init class="form-outline mb-4">
-                                        <input type="text" name="sujet" id="sujet" class="form-control" />
-                                        <label class="form-label" for="sujet">Sujet</label>
-                                    </div>
+                                <input type="hidden" name="idRec" value=<?php echo $userData['id']; ?>>
 
-                                    <!-- Text input -->
-                                    <div data-mdb-input-init class="form-outline mb-4">
-                                        <input type="text" name="ville" id="ville" class="form-control" />
-                                        <label class="form-label" for="ville">Ville</label>
-                                    </div>
+                                <!-- Text input -->
+                                <div data-mdb-input-init class="form-outline mb-2">
+                                    <input required type="text" name="sujet" id="sujet" class="form-control" />
+                                    <label class="form-label" for="sujet">Sujet</label>
+                                </div>
 
-                                    <!-- Message input -->
-                                    <div data-mdb-input-init class="form-outline mb-4">
-                                        <textarea class="form-control" id="form6Example7" rows="4"></textarea>
-                                        <label class="form-label" name="description" for="description">Job
-                                            details</label>
-                                    </div>
-                                    <button data-mdb-ripple-init type="submit"
-                                        class="btn btn-primary btn-block mb-4">Publish</button>
-                                    <button data-mdb-ripple-init type="submit"
-                                        class="btn btn-outline-dark btn-block mb-4">Clear
-                                        form</button>
-                                </form>
+                                <!-- profession -->
+                                <div data-mdb-input-init class="form-outline mb-2">
+                                    <select required class="form-select" aria-label="Large select example" name="prof" id="profession">
+                                        <option selected disabled></option>
+                                        <?php
+                                        // Check if records were found
+                                        if (count($professions) > 0) {
+                                            // Output data of each row as options for the select list
+                                            foreach ($professions as $row) {
+                                                echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="-1" selected disabled >No job titles found</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                    <label class="form-label" for="prof">Proffession a chercher</label>
+                                </div>
+                                
+
+                                <!-- Text input -->
+                                <div data-mdb-input-init class="form-outline mb-2">
+                                    <input type="text" name="ville" id="ville" class="form-control" />
+                                    <label class="form-label" for="ville">Ville</label>
+                                </div>
+
+                                <!-- type -->
+                                <div data-mdb-input-init class="form-outline mb-2">
+                                    <input type="text" name="type" id="type" class="form-control" />
+                                    <label class="form-label" for="type">Type d'offre</label>
+                                </div>
+
+                                <!-- duree -->
+                                <div data-mdb-input-init class="form-outline mb-2">
+                                    <input type="text" name="duree" id="duree" class="form-control" />
+                                    <label class="form-label" for="duree">Duree</label>
+                                </div>
+
+                                <!-- Message input -->
+                                <div data-mdb-input-init class="form-outline mb-2">
+                                    <textarea required class="form-control" name="desc" id="desc" rows="4"></textarea>
+                                    <label class="form-label" name="description" for="description">Job
+                                        details</label>
+                                </div>
+
+                                <!-- exp -->
+                                <div data-mdb-input-init class="form-outline mb-2">
+                                    <input type="text" name="exp" id="exp" class="form-control" />
+                                    <label class="form-label" for="exp">Experiences</label>
+                                </div>
+                                
+                                <button data-mdb-ripple-init type="submit" id="clear"
+                                    class="btn btn-dark btn-block mb-4">Publish</button>
+
+                            </form>
+                            <div class="alert alert-success" id="jobOffer-alert" role="alert">
+                                A simple success alert—check it out!
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <form method="GET" id="formData">
 
-                    <button type="submit" class="btn btn-primary" name="chercher">Chercher</button>
+                    <button type="submit" class="btn btn-light" name="chercher">Chercher</button>
 
 
                     <!-- domaine -->
                     <select class="form-select" name="profession" id="domainSelect"
                         style="text-align: center; color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;">
-                        <option selected>Domaine</option>
-                        <option>Journaliste</option>
-                        <option>Médecin</option>
-                        <option>Three</option>
+                        <option selected disabled>Domaine</option>
+                        <?php
+
+                                        // Check if records were found
+                                        if (count($professions) > 0) {
+                                            // Output data of each row as options for the select list
+                                            foreach ($professions as $row) {
+                                                echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="-1" selected disabled >No job titles found</option>';
+                                        }
+                                        ?>
                     </select>
                     <!-- <input type="text" name="profession" id=""> -->
-
-
-
-
 
                     <!-- technologie -->
                     <div class="dropdown">
                         <select class="btn dropdown-toggle"
                             style="color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;"
-                            onchange="createBox(this)">
-                            <option value="Option 1">Option 1</option>
-                            <option value="Option 2">Option 2</option>
-                            <option value="Option 3">Option 3</option>
+                            onchange="createBox(this.value,this)">
+                            <option selected disabled>technologies</option>
+                            <?php
+                                        $professions = $DB->fetchProfessions();
+                                        // Check if records were found
+                                        if (count($professions) > 0) {
+                                            // Output data of each row as options for the select list
+                                            foreach ($professions as $row) {
+                                                echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="-1" selected disabled >No job titles found</option>';
+                                        }
+                                        ?>
                         </select>
                     </div>
 
                     <div id="selectedBoxesContainer" class="container mt-3"></div>
 
-                </div>
+            </div>
 
 
             </form>
@@ -232,8 +283,6 @@ background-size: cover;">
                                         <h5 class="card-title">' . $this->nom . ' ' . $this->prenom . '</h5>
                                         <p class="card-text">' . $this->profession . '</p>
                                         <a  href="' . $this->cv . '" class="btn btn-primary btn-sm" target="_blank">Voir CV</a>
-                                        
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -268,35 +317,48 @@ background-size: cover;">
 
     </div>
 
+    <script>
+        class domain{
 
+            listTech=[];
 
+            constructor(nom, ...list){
+                this.nom = nom;
+                this.listTech=list;
+            }
+
+        }
+    </script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script>
+
+
         function createBox(option, element) {
             var newBox = document.createElement("div");
             newBox.innerHTML = `
-            <div class="col">
+        <div class="col">
             <input type="text" name="option[]" value="${option}" readonly style="background-color:#99acb1;">
         </div>
-            <div class="col">
-                
-                <input placeholder="Formation/Langues/Experiences..." type="text" name="custom[]" />
-                <input placeholder="Score" type="number" class="quantity-input" min="1" max="10" name="quantity[]"/>
-            </div>
-            `;
-
-
+        <div class="col">
+            <input placeholder="Formation/Langues/Experiences..." type="text" name="custom[]" />
+            <input placeholder="Score" type="number" class="quantity-input" min="1" max="10" name="quantity[]"/>
+        </div>
+    `;
             newBox.classList.add("selected-box");
             document.getElementById("selectedBoxesContainer").appendChild(newBox);
-            element.classList.add("disabled");
+
+            // Désactiver l'option sélectionnée
+            element.querySelector(`option[value="${option}"]`).disabled = true;
 
         }
-
         function submitForm() {
             document.getElementById("formData").submit(); // Submit the form
         }
-    </script>
 
+
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./server/jobOffer/jobOffer.js"></script>
 
 </body>
 

@@ -38,21 +38,22 @@ class DB_class
         var_dump($row);
     }
 
-    private function checkSociete($societe){
-            try{
-                $sql = "SELECT count(*) FROM HR_users WHERE nomSociete = :societe";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute(['societe' => $societe]);
-                $row = $stmt->fetch();
+    private function checkSociete($societe)
+    {
+        try {
+            $sql = "SELECT count(*) FROM HR_users WHERE nomSociete = :societe";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['societe' => $societe]);
+            $row = $stmt->fetch();
 
-                if ($row[0] == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }catch(PDOException $e){
-                echo"checkSociete error ". $e->getMessage();
+            if ($row[0] == 0) {
+                return true;
+            } else {
+                return false;
             }
+        } catch (PDOException $e) {
+            echo "checkSociete error " . $e->getMessage();
+        }
     }
 
     private function checkEmail($email, $role)
@@ -125,7 +126,7 @@ class DB_class
             if (!file_exists($this->pdf_dir)) {
                 mkdir($this->pdf_dir, 0777, true);
             }
-            
+
             $filename = $File["name"];
             $tmpFilePath = $File["tmp_name"];
             $fileSize = filesize($tmpFilePath);
@@ -151,18 +152,19 @@ class DB_class
         }
     }
 
-    public function selectCVPath(int $id_client){
-        try{
+    public function selectCVPath(int $id_client)
+    {
+        try {
 
             $sql = "SELECT cv.path FROM cv_documents cv, client_users cl WHERE cl.CV = cv.id AND cl.id = :id LIMIT 1;";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(":id",$id_client);
+            $stmt->bindParam(":id", $id_client);
             $stmt->execute();
             $res = $stmt->fetch();
             var_dump($res);
             return $res[0];
 
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "selectCVPath error: " . $e->getMessage();
         }
     }
@@ -210,7 +212,7 @@ class DB_class
     public function insertHR($companyName, $ICE, $industry, $HRFirstName, $HRLastName, $email, $password, $tel, $city)
     {
         try {
-            if($this->checkSociete($companyName)){
+            if ($this->checkSociete($companyName)) {
                 if ($this->checkEmail($email, "HR")) {
 
                     $hash = password_hash($password, PASSWORD_BCRYPT);
@@ -226,18 +228,18 @@ class DB_class
                     $stmt->bindParam(7, $industry, PDO::PARAM_INT);
                     $stmt->bindParam(8, $HRLastName, PDO::PARAM_STR);
                     $stmt->bindParam(9, $HRFirstName, PDO::PARAM_STR);
-                    
+
                     $stmt->execute();
-    
+
                     echo "0";
-    
+
                 } else {
                     echo "1";
                 }
-            }else{
+            } else {
                 echo "2";
             }
-            
+
 
         } catch (PDOException $e) {
             echo $industry;
@@ -304,13 +306,31 @@ class DB_class
             $user = $stmt->fetch();
 
             return $user;
-            
+
         } catch (PDOException $e) {
             echo "getClientByID error : " . $e->getMessage();
         }
     }
 
-    public function fetchProfessions(){
+    public function getHRByID($id)
+    {
+        try {
+
+            $sql = "SELECT HR.*, nom as industyName FROM HR_users HR, industrie I WHERE HR.industrie = I.id  AND HR.id = :id LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $user = $stmt->fetch();
+
+            return $user;
+
+        } catch (PDOException $e) {
+            echo "getHRByID error : " . $e->getMessage();
+        }
+    }
+
+    public function fetchProfessions()
+    {
         try {
 
             $sql = "SELECT id, nom FROM profession";
@@ -319,13 +339,14 @@ class DB_class
             $profession = $stmt->fetchAll();
 
             return $profession;
-            
+
         } catch (PDOException $e) {
             echo "fetchProfession error : " . $e->getMessage();
         }
     }
-    
-    public function fetchIndustries(){
+
+    public function fetchIndustries()
+    {
         try {
 
             $sql = "SELECT id, nom FROM industrie";
@@ -334,13 +355,14 @@ class DB_class
             $industrie = $stmt->fetchAll();
 
             return $industrie;
-            
+
         } catch (PDOException $e) {
             echo "fetchIndustries error : " . $e->getMessage();
         }
     }
 
-    public function getClientData($id){
+    public function getClientData($id)
+    {
         try {
 
             $sql = "SELECT c.* , p.nom AS profession_name FROM client_users c , profession p  WHERE p.id = profession and c.id=:id LIMIT 1";
@@ -356,35 +378,63 @@ class DB_class
         }
     }
 
-    public function getTech(int $profession_id){
-        try{
+    public function getTech(int $profession_id)
+    {
+        try {
             $sql = "SELECT nom from technologies WHERE profession_id  = :id LIMIT 1";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(":id",$profession_id);
+            $stmt->bindParam(":id", $profession_id);
             $stmt->execute();
             $techArray = $stmt->fetch();
             $techs = explode(",", $techArray[0]);
             return $techs;
-        }
-        catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "getTech error : " . $e->getMessage();
         }
     }
-    
+
     public function getUsersByProfession($profession)
     {
         try {
             $sql = "select * from client_users where profession =(SELECT id FROM profession where nom =:profession)";
             $stmt = $this->pdo->prepare($sql);
-            
+
             $stmt->bindParam(':profession', $profession);
             $stmt->execute();
             $users = $stmt->fetchAll();
-           
-    
+
+
             return $users;
         } catch (PDOException $e) {
             echo "getUsersByProfession error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function insertJobOffer($idRec, $idProf, $sujet, $desc, $ville, $type, $duree, $experience)
+    {
+        try {
+
+            $sql = "INSERT INTO offreemploi (idRecruteur, idProfession, sujet, description, ville, type, duree, experience)
+            VALUES (?,?,?,?,?,?,?,?)";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(1, $idRec, pdo::PARAM_INT);
+            $stmt->bindParam(2, $idProf, pdo::PARAM_INT);
+            $stmt->bindParam(3, $sujet, pdo::PARAM_STR);
+            $stmt->bindParam(4, $desc, pdo::PARAM_STR);
+            $stmt->bindParam(5, $ville, pdo::PARAM_STR);
+            $stmt->bindParam(6, $type, pdo::PARAM_STR);
+            $stmt->bindParam(7, $duree, pdo::PARAM_STR);
+            $stmt->bindParam(8, $experience, pdo::PARAM_STR);
+
+            if($stmt->execute()){
+                echo "0";
+            }
+
+
+        } catch (PDOException $e) {
+            echo "insertJobOffer error: " . $e->getMessage();
             return null;
         }
     }
