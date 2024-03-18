@@ -47,7 +47,7 @@ function createCard(row) {
     buttonDiv.classList.add('d-flex', 'justify-content-between');
 
     var cvLink = document.createElement('a');
-    cvLink.href = row['path'];
+    cvLink.href = "http://localhost/CV/" + row['path'].split("/").pop();;
     cvLink.download = row['nom'] + '_' + row['prenom'] + '_CV.pdf';
     cvLink.classList.add('btn', 'btn-primary', 'btn-sm');
     cvLink.textContent = 'Telecharger cv';
@@ -74,27 +74,37 @@ function createCard(row) {
     return card;
 }
 
-// function get(id_domain) {
+let score=0;
 
-//     xhr.open('GET', 'fetch_data.php?id=' + id, true);
-//     xhr.onload = function () {
-//         if (xhr.status >= 200 && xhr.status < 300) {
-//             // Request was successful
-//             var responseData = JSON.parse(xhr.responseText);
-//             console.log(responseData);
-//             // Process the responseData as needed
-//         } else {
-//             // Request failed
-//             console.error('Request failed with status:', xhr.status);
-//         }
-//     };
-//     xhr.onerror = function () {
-//         // Network errors
-//         console.error('Request failed');
-//     };
-//     xhr.send();
+function getScore(id_client, preferences, callback) {
+    let formData = {
+        id_client: id_client,
+        preferences: preferences
+    };
 
-// }
+    // Send the data using AJAX
+    $.ajax({
+        url: './server/cv.php', // Replace with your PHP script's URL
+        type: 'GET',
+        data: formData,
+        contentType: 'application/json',
+        success: function(response) {
+            // Handle success
+            console.log(response);
+            let score = Number(response);
+            // Call the callback function with the score
+            callback(score);
+        },
+        error: function(xhr, status, error) {
+            // Handle error
+            console.error(xhr.responseText);
+            // Call the callback function with an error indicator (e.g., null)
+            callback(null);
+        }
+    });
+}
+
+
 
 function clearWrapper(wrapper) {
     if (wrapper) {
@@ -125,12 +135,60 @@ function createBox(option, element) {
 
 }
 
-function submitForm() {
-    document.getElementById("formData").submit(); // Submit the form
+function getFormCV() {
+    // Now your function logic goes here
+    var inputs = document.querySelectorAll("#selectedBoxesContainer input");
+    let S = "";
+    for (var i = 0; i < inputs.length; i++) {
+        if (i % 3 == 2) {
+            S += inputs[i].value + ";";
+        } else {
+            S += inputs[i].value + ",";
+        }
+    }
+    console.log(S);
+    return S;
 }
 
-function giveScore(X) {
+function search(event, cand) {
+    if (event) {
+        event.preventDefault(); // Prevent default form submission behavior
+    }
+    let S = getFormCV(event);
+    let updatedCandidates = [];
 
+    // Define a function to handle the score retrieval for each candidate
+    function handleScoreRetrieval(candidate) {
+        getScore(candidate.id, S, function(score) {
+            // Update the candidate's score
+            candidate.score = score;
+            console.log(candidate);
+            updatedCandidates.push(candidate);
+
+            // Check if scores are updated for all candidates
+            if (updatedCandidates.length === cand.length) {
+                // Once all scores are retrieved, update the UI
+                let CondidatWrapper = document.getElementById("condidat-wrapper");
+                clearWrapper(CondidatWrapper);
+                updatedCandidates.forEach(element => {
+                    var card = createCard(element);
+                    CondidatWrapper.appendChild(card);
+                });
+
+                main(updatedCandidates);
+            }
+        });
+    }
+
+    // Call handleScoreRetrieval for each candidate
+    cand.forEach(candidate => {
+        handleScoreRetrieval(candidate);
+    });
+}
+
+
+function submitForm() {
+    document.getElementById("formData").submit(); // Submit the form
 }
 
 

@@ -8,6 +8,7 @@ class CV_class:
         self.loisir = []
         self.projet = []
         self.experience = []
+        self.txt=""
 
 
     key_words = {
@@ -44,17 +45,19 @@ class CV_class:
     }
 
 # Method to calculate the total score based on extracted data
-    def calculate_total_score(self):
+    # Method to calculate the total score based on extracted data
+    def calculate_total_score(self, constraints):
         total_score = 0
-        for attribute in self.scoring_weights:
-            # Get the score for the attribute and multiply it by the number of elements in the attribute
-            total_score += self.scoring_weights[attribute] * len(getattr(self, attribute))
+        for element in constraints:
+            row = element.split(",")
+            if row[0].lower() in self.txt.lower():
+                total_score += int(row[2])  # Convert score to integer before adding
         return total_score
 
-    def extract_values(self, TXT):
-        lines = [line.strip() for line in TXT.split('\n') if line.strip()]
-        print(TXT)
-        att=""
+    def extract_values(self, txt):
+        self.txt = txt
+        lines = [line.strip() for line in txt.split('\n') if line.strip()]
+        att = ""
         for line in lines:
             for attribute, elements in self.key_words.items():
                 for element in elements:
@@ -62,5 +65,4 @@ class CV_class:
                         att = attribute
             if hasattr(self, att):
                 getattr(self, att).append(line)
-
         return self

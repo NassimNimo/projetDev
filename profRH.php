@@ -34,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Now $scoreResult contains the result of the give_score function
     // You can use this variable as needed in the rest of your PHP script
 }
-$condidats[0]['score'] = 89;
 
 $jsonCondidats = json_encode($condidats);
 $jsonTech = json_encode($Techs);
@@ -59,6 +58,11 @@ $jsonTech = json_encode($Techs);
 
     <title>Espace candidat</title>
 </head>
+
+<script>
+    let condidatJSON = <?php echo $jsonCondidats; ?>;
+    let Techs = <?php echo $jsonTech ?>;
+</script>
 
 <body style="height: 100vh;
 background: #C9CCD3;
@@ -115,7 +119,7 @@ background-size: cover;">
                 </div>
             </div>
 
-            <div class="container-fluid bg-dark sticky-top border border-dark rounded mt-1 pt-2">
+            <div class="container-fluid bg-dark sticky-top border border-dark rounded mt-1 pt-2 mb-5 pb-3">
 
 
                 <button class="btn btn-outline-light mb-1" type="button" data-bs-toggle="offcanvas"
@@ -203,7 +207,7 @@ background-size: cover;">
                     </div>
                 </div>
 
-                <form method="GET" id="formData">
+                <form method="GET" id="formData"  onsubmit="return search(event, condidatJSON)">
 
                     <button type="submit" class="btn btn-light" name="chercher">Chercher</button>
 
@@ -307,8 +311,9 @@ background-size: cover;">
         // });
     </script>
     <script>
-        let condidatJSON = <?php echo $jsonCondidats; ?>;
-        let Techs = <?php echo $jsonTech ?>;
+
+        main(condidatJSON);
+
 
         for (var i = 0; i < Techs.length; i++) {
             // Split the 'nom' property string by comma and assign it back to the 'nom' property as an array
@@ -347,6 +352,9 @@ background-size: cover;">
     </script>
 
     <script>
+
+        
+
         class domain {
 
             listTech = [];

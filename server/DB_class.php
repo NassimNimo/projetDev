@@ -161,7 +161,6 @@ class DB_class
             $stmt->bindParam(":id", $id_client);
             $stmt->execute();
             $res = $stmt->fetch();
-            var_dump($res);
             return $res[0];
 
         } catch (PDOException $e) {
@@ -430,7 +429,7 @@ class DB_class
 
     public function getTechByProfName(string $profession_name) {
         try {
-            $sql = "SELECT t.nom  
+            $sql = "SELECT t.nom
             FROM technologies t, profession p
             WHERE t.profession_id = p.id
             AND p.nom = :name";
@@ -524,7 +523,7 @@ class DB_class
     {
         try {
 
-            $sql = "SELECT c.nom, c.prenom, pr.nom as prof, o.sujet as jobTitle, cv.path  FROM client_users c, hr_users hr, postulation p, cv_documents cv, profession pr, offreemploi o
+            $sql = "SELECT c.id as id ,c.nom, c.prenom, pr.nom as prof, o.sujet as jobTitle, cv.path  FROM client_users c, hr_users hr, postulation p, cv_documents cv, profession pr, offreemploi o
             WHERE hr.id = o.idRecruteur AND p.idOffreEmploi = o.id AND p.idCondidat = c.id AND c.CV = cv.id AND pr.id = c.profession";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
