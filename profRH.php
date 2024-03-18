@@ -329,6 +329,8 @@ background-size: cover;">
 
             let B = document.getElementById("techSelect");
 
+            clearWrapper(document.getElementById("selectedBoxesContainer"));
+
             while (B.firstChild) {
                 B.removeChild(B.firstChild);
             }
