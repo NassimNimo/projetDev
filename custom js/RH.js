@@ -170,12 +170,15 @@ function search(event, cand) {
                 // Once all scores are retrieved, update the UI
                 let CondidatWrapper = document.getElementById("condidat-wrapper");
                 clearWrapper(CondidatWrapper);
+
                 updatedCandidates.forEach(element => {
-                    var card = createCard(element);
-                    CondidatWrapper.appendChild(card);
+                    console.log(element.score)
+                    if(element.score !== 0){
+                        var card = createCard(element);
+                        CondidatWrapper.appendChild(card);    
+                    }
                 });
 
-                main(updatedCandidates);
             }
         });
     }
