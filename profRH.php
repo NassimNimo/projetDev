@@ -200,7 +200,7 @@ background-size: cover;">
                                     class="btn btn-dark btn-block mb-4">Publish</button>
 
                             </form>
-                            <div class="alert alert-success" id="jobOffer-alert" role="alert">
+                            <div class="alert alert-success" id="jobOffer-alert" role="alert" style="display: none;">
                                 A simple success alert—check it out!
                             </div>
                         </div>

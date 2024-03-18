@@ -123,8 +123,8 @@ function createBox(option, element) {
             <input type="text" name="option_${option}" value="${option}" readonly style="background-color:#99acb1;">
         </div>
         <div class="col">
-            <input placeholder="Formation/Langues/Experiences..." type="text" name="custom_${option}" />
-            <input placeholder="Score" type="number" class="quantity-input" min="1" max="10" name="score_${option}"/>
+            <input style="display: none;" placeholder="Formation/Langues/Experiences..." type="text" name="custom_${option}" />
+            <input placeholder="Score" type="number" class="quantity-input" min="1" max="99" name="score_${option}"/>
         </div>
         `;
     newBox.classList.add("selected-box");
