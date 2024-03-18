@@ -12,18 +12,41 @@ if (!isset ($_SESSION['id'])) {
 }
 
 $professions = $DB->fetchProfessions();
+$Techs = $DB->fetchTech();
 $userData = $DB->getHRByID($_SESSION['id']);
 $condidats = $DB->getCandidates($userData['id']);
+
+foreach ($condidats as $row) {
+    $localFilePath = $row["path"];
+    $localFilePath = str_replace('\\', '/', $localFilePath);
+    $documentName = basename($localFilePath);
+    $baseURL = 'http://localhost/';
+    $row["path"] = $baseURL . 'CV/' . $documentName;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
+    $HRpreferences = $_POST['HRpreferences'];
+
+    // Call the function and capture the result in a variable
+    // $scoreResult = give_score($id, $HRpreferences);
+
+    // Now $scoreResult contains the result of the give_score function
+    // You can use this variable as needed in the rest of your PHP script
+}
+$condidats[0]['score'] = 89;
+
+$jsonCondidats = json_encode($condidats);
+$jsonTech = json_encode($Techs);
 
 /////////////////////////////////////////////////////
 //fach tbghi dir chi score ha kifach tzido //////////
 /////////////////////////////////////////////////////
-$condidats[0]['score'] = 89;
 
 // echo "<pre>";
-// var_dump($userData);
+// var_dump($Techs);
 // echo "</pre>"
-?>
+    ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -188,7 +211,7 @@ background-size: cover;">
                     <!-- domaine -->
                     <select class="form-select" name="profession" id="domainSelect"
                         style="text-align: center; color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;">
-                        <option selected disabled>Domaine</option>
+                        <option value="-1" selected disabled>Domaine</option>
                         <?php
 
                         // Check if records were found
@@ -206,26 +229,19 @@ background-size: cover;">
 
                     <!-- technologie -->
                     <div class="dropdown">
-                        <select class="btn dropdown-toggle"
+                        <select class="btn dropdown-toggle" name="tech"
                             style="color: antiquewhite; background-color: rgba(93, 117, 117, 0.735); width: 100%; border-color: black; margin: 4px;"
-                            onchange="createBox(this.value,this)">
+                            id="techSelect" onchange="createBox(this.value,this)">
                             <option selected disabled>technologies</option>
                             <?php
-                            $professions = $DB->fetchProfessions();
-                            // Check if records were found
-                            if (count($professions) > 0) {
-                                // Output data of each row as options for the select list
-                                foreach ($professions as $row) {
-                                    echo '<option value="' . $row["id"] . '">' . $row["nom"] . '</option>';
-                                }
-                            } else {
-                                echo '<option value="-1" selected disabled >No job titles found</option>';
-                            }
+
                             ?>
                         </select>
                     </div>
 
-                    <div id="selectedBoxesContainer" class="container mt-3"></div>
+                    <div id="selectedBoxesContainer" class="container mt-3">
+
+                    </div>
 
             </div>
 
@@ -234,48 +250,14 @@ background-size: cover;">
 
         </div>
 
-        <div class="col-12 col-md-8 mt-2">
-            <?php
-
-            if (count($condidats) > 0) {
-                // Output data of each row as options for the select list
-                foreach ($condidats as $row) {
-
-                    $localFilePath = $row["path"];
-                    $localFilePath = str_replace('\\', '/', $localFilePath);
-                    $documentName = basename($localFilePath);
-                    $baseURL = 'http://localhost/';
-                    $documentURL = $baseURL . 'CV/' . $documentName;
-                    echo $documentURL;
-
-                    echo '  <div class="card m-1">
-                                <div class="row no-gutters m-2">
-                                    <div class="col-md-3">
-                                    <a href="#" title="voir profile"> <img class="card-img" src="./assets/otherassets/default-pfp.jpg" style="width: 200px !important;"
-                                        alt="Card image cap"></a>
-                                    </div>
-                                    <div class="col-md-9">
-                                    <h3 class="text-center">' . $row['jobTitle'] . '</h3>
-                                        <div class="card-body">
-                                            <h5 class="card-title">' . $row['nom'] . ' ' . $row['prenom'] . '</h5>
-                                            <p class="card-text">' . $row['prof'] . '</p>
-
-
-                                            <div class="d-flex justify-content-between">
-                                                <a href="'. $documentURL .'" download="' . $row['nom'] . '_' . $row['prenom'] . '_CV.pdf"
-                                                class="btn btn-primary btn-sm ">Telecharger cv</a>
-                                                <p >' . (isset ($row['score']) ? 'score : <span id="score">' . $row['score'] : '</span>') . '</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                
-                                </div>
-                                </div>';
-                }
-            } else {
-                echo '<option value="-1" selected disabled >No job titles found</option>';
-            }
-            ?>
+        <div id="condidat-wrapper" class="col-12 col-md-8 mt-2">
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
             <div class="card m-1">
 
                 <div class="row no-gutters m-2">
@@ -303,10 +285,66 @@ background-size: cover;">
 
                 </div>
             </div>
-
         </div>
 
     </div>
+
+    <script src="./custom js/RH.js"></script>
+    <script>
+        // $(document).ready(function(){
+        //     $('#formData').submit(function(e){
+        //         e.preventDefault(); // Prevent form submission
+        //         var formData = $(this).serialize(); // Serialize form data
+        //         $.ajax({
+        //             type: 'POST',
+        //             url: './server/process.php', // PHP script to handle form submission
+        //             data: formData,
+        //             success: function(response){
+        //                 $('#result').html(response); // Display response in result div
+        //             }
+        //         });
+        //     });
+        // });
+    </script>
+    <script>
+        let condidatJSON = <?php echo $jsonCondidats; ?>;
+        let Techs = <?php echo $jsonTech ?>;
+
+        for (var i = 0; i < Techs.length; i++) {
+            // Split the 'nom' property string by comma and assign it back to the 'nom' property as an array
+            Techs[i].nom = Techs[i].nom.split(',').map(function (item) {
+                return item.trim(); // Trim whitespace from each item
+            });
+        }
+
+        console.log(Techs);
+
+        let remplirEtu = () => {
+            let A = document.getElementById("domainSelect");
+
+            let B = document.getElementById("techSelect");
+
+            while (B.firstChild) {
+                B.removeChild(B.firstChild);
+            }
+
+            var optionempty = document.createElement("option");
+            optionempty.textContent = "choisissez...";
+            optionempty.disabled = true;
+            optionempty.selected = true;
+            B.appendChild(optionempty)
+
+                for (let i = 0; i < Techs[A.value-1].nom.length; i++) {
+                    var option = document.createElement("option");
+                    option.textContent = Techs[A.value-1].nom[i];
+                    option.value = Techs[A.value-1].nom[i];
+                    B.appendChild(option);
+        }
+    }
+
+        document.getElementById("domainSelect").onchange = remplirEtu;
+
+    </script>
 
     <script>
         class domain {
@@ -321,33 +359,6 @@ background-size: cover;">
         }
     </script>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script>
-
-
-        function createBox(option, element) {
-            var newBox = document.createElement("div");
-            newBox.innerHTML = `
-        <div class="col">
-            <input type="text" name="option[]" value="${option}" readonly style="background-color:#99acb1;">
-        </div>
-        <div class="col">
-            <input placeholder="Formation/Langues/Experiences..." type="text" name="custom[]" />
-            <input placeholder="Score" type="number" class="quantity-input" min="1" max="10" name="quantity[]"/>
-        </div>
-    `;
-            newBox.classList.add("selected-box");
-            document.getElementById("selectedBoxesContainer").appendChild(newBox);
-
-            // Désactiver l'option sélectionnée
-            element.querySelector(`option[value="${option}"]`).disabled = true;
-
-        }
-        function submitForm() {
-            document.getElementById("formData").submit(); // Submit the form
-        }
-
-
-    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./server/jobOffer/jobOffer.js"></script>
 

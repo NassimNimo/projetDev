@@ -378,6 +378,23 @@ class DB_class
         }
     }
 
+    public function fetchTech()
+    {
+        try {
+            $sql = "SELECT * from technologies order by profession_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $techArray = $stmt->fetchAll(pdo::FETCH_ASSOC);
+            $i=0;
+            foreach ($techArray as $row){
+                
+            }
+            return $techArray;
+        } catch (PDOException $e) {
+            echo "getTech error : " . $e->getMessage();
+        }
+    }
+
     public function getTech(int $profession_id)
     {
         try {
@@ -408,6 +425,37 @@ class DB_class
         } catch (PDOException $e) {
             echo "getUsersByProfession error: " . $e->getMessage();
             return null;
+        }
+    }
+
+    public function getTechByProfName(string $profession_name) {
+        try {
+            $sql = "SELECT t.nom  
+            FROM technologies t, profession p
+            WHERE t.profession_id = p.id
+            AND p.nom = :name";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(":name", $profession_name);
+            $stmt->execute();
+            $techArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $techArray;
+        } catch (PDOException $e) {
+            echo "getTech error : " . $e->getMessage();
+            // Handle the exception as needed (logging, error response, etc.)
+            return []; // Return an empty array or handle the error case appropriately
+        }
+    }
+    
+    public function getHRData($id){
+        try {
+            $sql = "SELECT h.* , i.nom AS industry_name FROM HR_users h , Industrie i  WHERE i.id= industrie and h.id=:id LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+            $userData = $stmt->fetch();
+            return $userData;
+        } catch (PDOException $e) {
+            echo "fetchIndustries error : " . $e->getMessage();
         }
     }
 
